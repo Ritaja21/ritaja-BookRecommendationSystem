@@ -81,5 +81,41 @@ namespace api.Controllers
                     $"An Error occured while creating the book : {ex.Message}");
             }
         }
+
+        //update the book details
+        [HttpPut("{id:int}")]
+
+        public async Task<ActionResult<Book>> UpdateBook(int id, BookUpdateDTO bookDTO)
+        {
+            try
+            {
+                if (bookDTO == null)
+                {
+                    return BadRequest("Book data is required");
+                }
+
+                if (id != bookDTO.Id)
+                {
+                    return BadRequest("Book ID in URL does not match Book ID in the request body");
+                }
+
+                var existingBook = await _db.Books.FirstOrDefaultAsync(u => u.BookId == id);
+
+                if (existingBook == null)
+                {
+                    return NotFound($"Book with ID {id} was not found");
+                }
+
+                _mapper.Map(bookDTO, existingBook);
+                await _db.SaveChangesAsync();
+
+                return Ok(bookDTO);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    $"An Error occured while updating the book : {ex.Message}");
+            }
+        }
     }
 }
