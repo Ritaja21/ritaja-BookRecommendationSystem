@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using api.Data;
 using api.Models;
+using AutoMapper;
+using api.Models.DTO;
 
 namespace api.Controllers
 {
@@ -10,9 +12,11 @@ namespace api.Controllers
     public class BookController : ControllerBase
     {
         private readonly AppDbContext _db;
-        public BookController(AppDbContext db)
+        private readonly IMapper _mapper;
+        public BookController(AppDbContext db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
 
@@ -49,6 +53,32 @@ namespace api.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, 
                     $"An error occured while retireving book with ID {id}: {ex.Message}");
+            }
+        }
+
+        //create book
+        [HttpPost]
+
+        public async Task<ActionResult<Book>> CreateBook(BookCreateDTO bookDTO)
+        {
+            try
+            {
+                if(bookDTO == null)
+                {
+                    return BadRequest("Book data is required");
+                }
+
+                Book book = _mapper.Map<Book>(bookDTO);
+
+                await _db.Books.AddAsync(book);
+                await _db.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(CreateBook), new { id=book.BookId }, book);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, 
+                    $"An Error occured while creating the book : {ex.Message}");
             }
         }
     }
