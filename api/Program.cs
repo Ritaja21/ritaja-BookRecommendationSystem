@@ -1,8 +1,10 @@
 using api.Data;
+using api.Models;
+using api.Models.DTO;
+using api.Repositories;
+using api.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-using api.Models.DTO;
-using api.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddAutoMapper(o =>
 {
     o.CreateMap<BookCreateDTO, Book>();
