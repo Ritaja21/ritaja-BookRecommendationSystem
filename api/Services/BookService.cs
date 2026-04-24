@@ -14,5 +14,10 @@ namespace api.Services
         {
             return await _repo.GetBooksAsync();
         }
+
+        public async Task<Book?> GetBookByIdAsync(int id)
+        {
+            return await _repo.GetBookByIdAsync(id);
+        }
     }
 }

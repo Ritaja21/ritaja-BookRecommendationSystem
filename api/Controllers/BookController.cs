@@ -30,31 +30,31 @@ namespace api.Controllers
 
         //get books by id
 
-        //[HttpGet("{id:int}")]
+        [HttpGet("{id:int}")]
 
-        //public async Task<ActionResult<Book>> GetBookById(int id)
-        //{
-        //    try
-        //    {
-        //        if (id <= 0)
-        //        {
-        //            return BadRequest("Movie ID must be greater than 0");
-        //        }
+        public async Task<ActionResult<Book>> GetBookById(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest("Book ID must be greater than 0");
+                }
 
-        //        var book = await _db.Books.FirstOrDefaultAsync(u=> u.BookId == id);
-        //        if(book == null)
-        //        {
-        //            return NotFound($"Movie with ID{id} was not found");
-        //        }
-        //        return Ok(book);
+                var book = await _service.GetBookByIdAsync(id);
+                if (book == null)
+                {
+                    return NotFound($"Book with ID{id} was not found");
+                }
+                return Ok(book);
 
-        //    }
-        //    catch (Exception ex) 
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, 
-        //            $"An error occured while retireving book with ID {id}: {ex.Message}");
-        //    }
-        //}
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    $"An error occured while retireving book with ID {id}: {ex.Message}");
+            }
+        }
 
         ////create book
         //[HttpPost]

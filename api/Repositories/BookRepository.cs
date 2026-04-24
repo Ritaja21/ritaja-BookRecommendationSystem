@@ -11,9 +11,16 @@ namespace api.Repositories
             _db = db;
         }
 
+        //get all books
         public async Task<List<Book>> GetBooksAsync()
         {
              return await _db.Books.ToListAsync();
+        }
+
+        //get book by id
+        public async Task<Book?> GetBookByIdAsync(int id)
+        {
+            return await _db.Books.FirstOrDefaultAsync(u=>u.BookId ==id);
         }
     }
 }
