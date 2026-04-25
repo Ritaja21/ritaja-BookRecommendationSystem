@@ -7,5 +7,6 @@ namespace api.src.Services
         Task<List<Book>> GetBooksAsync();
         Task<Book?> GetBookByIdAsync(int id);
         Task<Book> CreateBookAsync(BookCreateDTO bookDTO);
+        Task<Book?> UpdateBookAsync(int id, BookUpdateDTO bookDTO);
     }
 }

@@ -31,5 +31,19 @@ namespace api.src.Services
 
                  return  await _repo.CreateBookAsync(book);
         }
-    }
+
+        public async Task<Book?> UpdateBookAsync(int id, BookUpdateDTO bookDTO)
+        {
+            var existingBook = await _repo.GetBookByIdAsync(id);
+            if (existingBook == null)
+            {
+                return null;
+            }
+            _mapper.Map(bookDTO, existingBook);
+            existingBook.UpdatedAt = DateTime.UtcNow;
+
+            return await _repo.UpdateBookAsync(existingBook);
+
+        }
+     }
 }
