@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using System.ComponentModel.DataAnnotations;
+using System;
 namespace api.Models
 {
     public class Book
@@ -13,6 +14,9 @@ namespace api.Models
        
         public string? Genre { get; set; }
         public string? Description { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
 
 
     }

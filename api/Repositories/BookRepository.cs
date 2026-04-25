@@ -22,5 +22,13 @@ namespace api.Repositories
         {
             return await _db.Books.FirstOrDefaultAsync(u=>u.BookId ==id);
         }
+
+        //create book
+        public async Task<Book> CreateBookAsync(Book book)
+        {
+            await _db.Books.AddAsync(book);
+            await _db.SaveChangesAsync();
+            return book;
+        }
     }
 }

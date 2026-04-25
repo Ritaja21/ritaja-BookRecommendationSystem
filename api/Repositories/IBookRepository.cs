@@ -5,6 +5,8 @@ namespace api.Repositories
     {
         Task<List<Book>> GetBooksAsync();
         Task<Book?> GetBookByIdAsync(int id);
+
+        Task<Book> CreateBookAsync(Book book);
     }
 
 }
