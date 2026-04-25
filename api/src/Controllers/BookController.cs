@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using api.src.Data;
-using AutoMapper;
 using api.src.Models.DTO;
 using api.src.Models;
 using api.src.Services;
@@ -13,7 +12,6 @@ namespace api.src.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _service;
-        //private readonly IMapper _mapper;
         public BookController(IBookService service)
         {
             _service = service;
@@ -56,31 +54,28 @@ namespace api.src.Controllers
             }
         }
 
-        ////create book
-        //[HttpPost]
+        //create book
+        [HttpPost]
 
-        //public async Task<ActionResult<Book>> CreateBook(BookCreateDTO bookDTO)
-        //{
-        //    try
-        //    {
-        //        if(bookDTO == null)
-        //        {
-        //            return BadRequest("Book data is required");
-        //        }
+        public async Task<ActionResult<Book>> CreateBook(BookCreateDTO bookDTO)
+        {
+            try
+            {
+                if (bookDTO == null)
+                {
+                    return BadRequest("Book data is required");
+                } 
 
-        //        Book book = _mapper.Map<Book>(bookDTO);
+                var book = await _service.CreateBookAsync(bookDTO);
 
-        //        await _db.Books.AddAsync(book);
-        //        await _db.SaveChangesAsync();
-
-        //        return CreatedAtAction(nameof(CreateBook), new { id=book.BookId }, book);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, 
-        //            $"An Error occured while creating the book : {ex.Message}");
-        //    }
-        //}
+                return CreatedAtAction(nameof(GetBookById), new { id = book.BookId }, book);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    $"An Error occured while creating the book : {ex.Message}");
+            }
+        }
 
         ////update the book details
         //[HttpPut("{id:int}")]
