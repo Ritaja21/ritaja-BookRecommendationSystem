@@ -1,5 +1,5 @@
-﻿using api.Models;
-namespace api.Repositories
+﻿using api.src.Models;
+namespace api.src.Repositories
 {
     public interface IBookRepository
     {

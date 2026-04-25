@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using System.ComponentModel.DataAnnotations;
 using System;
-namespace api.Models
+namespace api.src.Models
 {
     public class Book
     {

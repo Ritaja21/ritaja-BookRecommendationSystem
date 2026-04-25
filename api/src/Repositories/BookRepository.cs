@@ -1,7 +1,7 @@
-﻿using api.Data;
-using api.Models;
+﻿using api.src.Data;
+using api.src.Models;
 using Microsoft.EntityFrameworkCore;
-namespace api.Repositories
+namespace api.src.Repositories
 {
     public class BookRepository : IBookRepository
     {

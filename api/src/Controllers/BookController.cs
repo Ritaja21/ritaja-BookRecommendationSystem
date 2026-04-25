@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using api.Data;
-using api.Models;
+using api.src.Data;
 using AutoMapper;
-using api.Models.DTO;
-using api.Services;
+using api.src.Models.DTO;
+using api.src.Models;
+using api.src.Services;
 
-namespace api.Controllers
+namespace api.src.Controllers
 {
     [ApiController]
     [Route("api/book")]

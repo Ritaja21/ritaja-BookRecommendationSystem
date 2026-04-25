@@ -1,8 +1,8 @@
-using api.Data;
-using api.Models;
-using api.Models.DTO;
-using api.Repositories;
-using api.Services;
+using api.src.Data;
+using api.src.Models;
+using api.src.Models.DTO;
+using api.src.Repositories;
+using api.src.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
