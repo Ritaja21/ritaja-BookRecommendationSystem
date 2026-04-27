@@ -46,5 +46,20 @@ namespace api.src.Repositories
 
             return existingBook;
         }
+
+        //delete book 
+        public async Task<bool> DeleteBookAsync(int id)
+        {
+            var givenBook = await _db.Books.FirstOrDefaultAsync(u=> u.BookId == id);
+
+            if (givenBook == null)
+            {
+                return false;
+            }
+            _db.Books.Remove(givenBook);
+            await _db.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

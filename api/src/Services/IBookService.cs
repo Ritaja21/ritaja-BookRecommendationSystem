@@ -8,5 +8,6 @@ namespace api.src.Services
         Task<Book?> GetBookByIdAsync(int id);
         Task<Book> CreateBookAsync(BookCreateDTO bookDTO);
         Task<Book?> UpdateBookAsync(int id, BookUpdateDTO bookDTO);
+        Task<bool> DeleteBookAsync(int id);
     }
 }

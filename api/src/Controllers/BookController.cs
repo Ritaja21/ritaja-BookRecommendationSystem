@@ -111,31 +111,28 @@ namespace api.src.Controllers
         }
 
         ////Delete Book
-        //[HttpDelete("{id:int}")]
+        [HttpDelete("{id:int}")]
 
-        //public async Task<ActionResult<Book>> DeleteBook(int id)
-        //{
-        //    try
-        //    { 
+        public async Task<ActionResult<Book>> DeleteBook(int id)
+        {
+            try
+            {
 
-        //        var existingBook = await _db.Books.FirstOrDefaultAsync(u => u.BookId == id);
+                var isDeleted = await _service.DeleteBookAsync(id);
 
-        //        if (existingBook == null)
-        //        {
-        //            return NotFound($"Book with ID {id} was not found");
-        //        }
+                if (isDeleted == null)
+                {
+                    return NotFound($"Book with ID {id} was not found");
+                }
 
-        //        _db.Books.Remove(existingBook);
-        //        await _db.SaveChangesAsync();
-
-        //        return NoContent();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError,
-        //            $"An Error occured while deleting the book : {ex.Message}");
-        //    }
-        //}
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    $"An Error occured while deleting the book : {ex.Message}");
+            }
+        }
 
     }
 }

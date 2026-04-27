@@ -45,5 +45,10 @@ namespace api.src.Services
             return await _repo.UpdateBookAsync(existingBook);
 
         }
+
+        public async Task<bool> DeleteBookAsync(int id)
+        {
+            return await _repo.DeleteBookAsync(id);
+        }
      }
 }
