@@ -120,7 +120,7 @@ namespace api.src.Controllers
 
                 var isDeleted = await _service.DeleteBookAsync(id);
 
-                if (isDeleted == null)
+                if (!isDeleted)
                 {
                     return NotFound($"Book with ID {id} was not found");
                 }
