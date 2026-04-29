@@ -19,6 +19,7 @@ builder.Services.AddAutoMapper(o =>
 {
     o.CreateMap<BookCreateDTO, Book>();
     o.CreateMap<BookUpdateDTO, Book>();
+    o.CreateMap<BookDTO, Book>();
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
