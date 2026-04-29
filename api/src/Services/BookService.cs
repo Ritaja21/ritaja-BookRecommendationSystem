@@ -39,6 +39,13 @@ namespace api.src.Services
             {
                 return null;
             }
+
+            var duplicateBook = await _repo.GetBookByNameAsync(bookDTO.Title);
+            if (duplicateBook != null && duplicateBook.BookId != id)
+            {
+                throw new Exception("A book with this title already exists");
+            }
+
             _mapper.Map(bookDTO, existingBook);
             existingBook.UpdatedAt = DateTime.UtcNow;
 

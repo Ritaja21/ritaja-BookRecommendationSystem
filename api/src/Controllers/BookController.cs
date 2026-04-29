@@ -105,6 +105,10 @@ namespace api.src.Controllers
             }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("already exists"))
+                {
+                    return Conflict(ex.Message); // 409
+                }
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     $"An Error occured while updating the book : {ex.Message}");
             }
