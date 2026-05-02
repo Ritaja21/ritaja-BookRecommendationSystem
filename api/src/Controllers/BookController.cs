@@ -4,6 +4,7 @@ using api.src.Data;
 using api.src.Models.DTO;
 using api.src.Models;
 using api.src.Services;
+using AutoMapper;
 
 namespace api.src.Controllers
 {
@@ -12,19 +13,44 @@ namespace api.src.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _service;
-        public BookController(IBookService service)
+        private readonly IMapper _mapper;
+        public BookController(IBookService service,IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
 
         //get books api
         [HttpGet]
 
-        public async Task<IActionResult> GetBook()
+        public async Task<ActionResult<ApiResponse<List<BookDTO>>>> GetBook()
         {
-            return Ok(await _service.GetBooksAsync());
-        }
+            try
+            {
+                var books = await _service.GetBooksAsync();
+                var bookDTOs = _mapper.Map<List<BookDTO>>(books);
+                var response = new ApiResponse<List<BookDTO>>
+                {
+                    Success = true,
+                    StatusCode = 200,
+                    Message = "Books fetched successfully",
+                    Data = bookDTOs
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>
+                {
+                    Success = false,
+                    StatusCode = 500,
+                    Message = "Error fetching books",
+                    Errors = ex.Message
+                });
+            }
+
+         }
 
         //get books by id
 
