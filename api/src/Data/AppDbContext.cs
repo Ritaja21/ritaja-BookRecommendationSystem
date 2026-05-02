@@ -8,5 +8,6 @@ namespace api.src.Data
         {
         }
         public DbSet<Book> Books { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

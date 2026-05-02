@@ -23,6 +23,12 @@ namespace api.src.Repositories
             return await _db.Books.FirstOrDefaultAsync(u => u.BookId == id);
         }
 
+        //get book by title 
+        public async Task<Book?> GetBookByNameAsync(string Title)
+        {
+            return await _db.Books.FirstOrDefaultAsync(u=> u.Title.ToLower() == Title.ToLower());
+        }
+
         //create book
         public async Task<Book> CreateBookAsync(Book book)
         {

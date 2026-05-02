@@ -27,6 +27,11 @@ namespace api.src.Services
 
         public async Task<Book> CreateBookAsync(BookCreateDTO bookDTO)
         {
+            var duplicateBook = await _repo.GetBookByNameAsync(bookDTO.Title);
+            if (duplicateBook != null)
+            {
+                throw new Exception("A book with this title already exists");
+            }
             Book book = _mapper.Map<Book>(bookDTO);
 
                  return  await _repo.CreateBookAsync(book);
@@ -39,6 +44,13 @@ namespace api.src.Services
             {
                 return null;
             }
+
+            var duplicateBook = await _repo.GetBookByNameAsync(bookDTO.Title);
+            if (duplicateBook != null && duplicateBook.BookId != id)
+            {
+                throw new Exception("A book with this title already exists");
+            }
+
             _mapper.Map(bookDTO, existingBook);
             
             existingBook.UpdatedAt = DateTime.UtcNow;

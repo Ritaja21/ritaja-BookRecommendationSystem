@@ -5,6 +5,7 @@ namespace api.src.Repositories
     {
         Task<List<Book>> GetBooksAsync();
         Task<Book?> GetBookByIdAsync(int id);
+        Task<Book?> GetBookByNameAsync(string Title);
 
         Task<Book> CreateBookAsync(Book book);
 
