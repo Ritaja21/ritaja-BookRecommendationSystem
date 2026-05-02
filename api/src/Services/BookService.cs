@@ -40,7 +40,7 @@ namespace api.src.Services
                 return null;
             }
             _mapper.Map(bookDTO, existingBook);
-            var d
+            
             existingBook.UpdatedAt = DateTime.UtcNow;
 
             return await _repo.UpdateBookAsync(existingBook);
