@@ -56,27 +56,52 @@ namespace api.src.Controllers
 
         [HttpGet("{id:int}")]
 
-        public async Task<ActionResult<Book>> GetBookById(int id)
+        public async Task<ActionResult<ApiResponse<BookDTO>>> GetBookById(int id)
         {
             try
             {
                 if (id <= 0)
                 {
-                    return BadRequest("Book ID must be greater than 0");
+                    return BadRequest(new ApiResponse<object>
+                    {
+                        Success = false,
+                        StatusCode = 400,
+                        Message = "Book ID must be greater than 0"
+                    });
+
                 }
 
                 var book = await _service.GetBookByIdAsync(id);
                 if (book == null)
                 {
-                    return NotFound($"Book with ID{id} was not found");
+                    return NotFound(new ApiResponse<object>
+                    {
+                        Success = false,
+                        StatusCode = 404,
+                        Message = $"Book with ID {id} was not found"
+                    });
                 }
-                return Ok(book);
+
+                var bookDTO = _mapper.Map<BookDTO>(book);
+
+                return Ok(new ApiResponse<object>
+                {
+                    Success = true,
+                    StatusCode = 200,
+                    Message = "Book fetched successfully",
+                    Data = bookDTO
+                });
 
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    $"An error occured while retireving book with ID {id}: {ex.Message}");
+                return StatusCode(500, new ApiResponse<object>
+                {
+                    Success = false,
+                    StatusCode = 500,
+                    Message = "Error retrieving book",
+                    Errors = ex.Message
+                });
             }
         }
 
