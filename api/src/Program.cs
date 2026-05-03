@@ -3,6 +3,7 @@ using api.src.Models;
 using api.src.Models.DTO;
 using api.src.Repositories;
 using api.src.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -27,6 +28,29 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
     );
+});
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState
+            .Where(e => e.Value.Errors.Count > 0)
+            .Select(e => new
+            {
+                Field = e.Key,
+                Messages = e.Value.Errors.Select(x => x.ErrorMessage)
+            });
+
+        var response = new ApiResponse<object>
+        {
+            Success = false,
+            StatusCode = 400,
+            Message = "Validation failed",
+            Errors = errors
+        };
+
+        return new BadRequestObjectResult(response);
+    };
 });
 
 var app = builder.Build();

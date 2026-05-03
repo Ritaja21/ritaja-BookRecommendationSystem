@@ -30,24 +30,13 @@ namespace api.src.Controllers
             {
                 var books = await _service.GetBooksAsync();
                 var bookDTOs = _mapper.Map<List<BookDTO>>(books);
-                var response = new ApiResponse<List<BookDTO>>
-                {
-                    Success = true,
-                    StatusCode = 200,
-                    Message = "Books fetched successfully",
-                    Data = bookDTOs
-                };
-                return Ok(response);
+                return Ok(ApiResponse<List<BookDTO>>.Ok("Books retrieved successfully", bookDTOs));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse<object>
-                {
-                    Success = false,
-                    StatusCode = 500,
-                    Message = "Error fetching books",
-                    Errors = ex.Message
-                });
+                return StatusCode(500,
+                    ApiResponse<object>.Error(500, "Error fetching books", ex.Message));
+               
             }
 
          }
@@ -62,117 +51,112 @@ namespace api.src.Controllers
             {
                 if (id <= 0)
                 {
-                    return BadRequest(new ApiResponse<object>
-                    {
-                        Success = false,
-                        StatusCode = 400,
-                        Message = "Book ID must be greater than 0"
-                    });
+                    return BadRequest(ApiResponse<object>.BadRequest("Book ID should be greater than 0"));
 
                 }
 
                 var book = await _service.GetBookByIdAsync(id);
                 if (book == null)
                 {
-                    return NotFound(new ApiResponse<object>
-                    {
-                        Success = false,
-                        StatusCode = 404,
-                        Message = $"Book with ID {id} was not found"
-                    });
+                    return NotFound(ApiResponse<object>.NotFound($"Book with ID {id} was not found"));
+                   
                 }
 
                 var bookDTO = _mapper.Map<BookDTO>(book);
 
-                return Ok(new ApiResponse<object>
-                {
-                    Success = true,
-                    StatusCode = 200,
-                    Message = "Book fetched successfully",
-                    Data = bookDTO
-                });
+                return Ok(ApiResponse<object>.Ok("Book fetched successfully", bookDTO));
+               
 
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse<object>
-                {
-                    Success = false,
-                    StatusCode = 500,
-                    Message = "Error retrieving book",
-                    Errors = ex.Message
-                });
+                return StatusCode(500,
+                    ApiResponse<object>.Error(500, "Error retrieving book", ex.Message));
             }
         }
 
         //create book
         [HttpPost]
 
-        public async Task<ActionResult<Book>> CreateBook(BookCreateDTO bookDTO)
+        public async Task<ActionResult<ApiResponse<BookDTO>>> CreateBook(BookCreateDTO bookDTO)
         {
             try
             {
                 if (bookDTO == null)
                 {
-                    return BadRequest("Book data is required");
+                    return BadRequest(ApiResponse<object>.BadRequest("Book Data is Required"));
+                   
                 } 
 
                 var book = await _service.CreateBookAsync(bookDTO);
 
-                return CreatedAtAction(nameof(GetBookById), new { id = book.BookId }, book);
+                var bookDTOresult = _mapper.Map<BookDTO>(book);
+
+                return CreatedAtAction(nameof(GetBookById), new { id = book.BookId }, ApiResponse<object>.CreatedAt("Book created successfully", bookDTOresult));
+                
             }
             catch (Exception ex)
             {
                 if (ex.Message.Contains("already exists"))
                 {
-                    return Conflict(ex.Message); // 409
+                    return Conflict(ApiResponse<object>.Conflict("Book already exists"));
+                   
                 }
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    $"An Error occured while creating the book : {ex.Message}");
+                return StatusCode(500,
+                    ApiResponse<object>.Error(500, "Failed to create book", ex.Message));
+              
             }
         }
 
         //update the book details
         [HttpPut("{id:int}")]
 
-        public async Task<ActionResult<Book>> UpdateBook(int id, BookUpdateDTO bookDTO)
+        public async Task<ActionResult<ApiResponse<BookDTO>>> UpdateBook(int id, BookUpdateDTO bookDTO)
         {
             try
             {
                 if (bookDTO == null)
                 {
-                    return BadRequest("Book data is required");
+                    return BadRequest(ApiResponse<object>.BadRequest("Book data is required"));
+                  
                 }
 
                 if (id != bookDTO.Id)
                 {
-                    return BadRequest("Book ID in URL does not match Book ID in the request body");
+                    return BadRequest(ApiResponse<object>.BadRequest("Book ID in the URL does not match Book ID in the request body"));
+                 
                 }
 
                 var updatedBook = await _service.UpdateBookAsync(id, bookDTO);
 
                 if (updatedBook == null)
                 {
-                    return NotFound($"Book with ID {id} was not found");
+                    return NotFound(ApiResponse<object>.NotFound($"Book with ID {id} was not found"));
+                  
                 }
 
-                return Ok(updatedBook);
+                var bookDTOresult = _mapper.Map<BookDTO>(updatedBook);
+
+                return Ok(ApiResponse<object>.Ok("Book data is updated successfully", bookDTOresult));
+              
             }
             catch (Exception ex)
             {
                 if (ex.Message.Contains("already exists"))
                 {
-                    return Conflict(ex.Message); // 409
+                    return Conflict(ApiResponse<object>.Conflict("Book with this name already exists"));
+                   
                 }
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    $"An Error occured while updating the book : {ex.Message}");
+                return StatusCode(500,
+                    ApiResponse<object>.Error(500, "Failed to update book data", ex.Message));
+               
             }
         }
 
         ////Delete Book
         [HttpDelete("{id:int}")]
 
-        public async Task<ActionResult<Book>> DeleteBook(int id)
+        public async Task<ActionResult<ApiResponse<BookDTO>>> DeleteBook(int id)
         {
             try
             {
@@ -181,15 +165,15 @@ namespace api.src.Controllers
 
                 if (!isDeleted)
                 {
-                    return NotFound($"Book with ID {id} was not found");
+                    return NotFound(ApiResponse<object>.NotFound($"Book with ID {id} was not found"));
                 }
 
-                return NoContent();
+                return Ok(ApiResponse<object>.NoContent());
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    $"An Error occured while deleting the book : {ex.Message}");
+                return StatusCode(500,
+                    ApiResponse<object>.Error(500,"Failed to delete book", ex.Message));
             }
         }
 
