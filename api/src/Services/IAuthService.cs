@@ -1,0 +1,11 @@
+﻿using api.src.Models.DTO;
+
+namespace api.src.Services
+{
+    public interface IAuthService
+    {
+        Task<UserDTO?> RegisterAsync(RegisterRequestDTO registerRequestDTO);
+
+        Task<bool> IsEmailExistsAsync(string email);
+    }
+}

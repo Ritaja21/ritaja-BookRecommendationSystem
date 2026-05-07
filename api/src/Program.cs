@@ -16,11 +16,14 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddAutoMapper(o =>
 {
     o.CreateMap<BookCreateDTO, Book>();
     o.CreateMap<BookUpdateDTO, Book>();
     o.CreateMap<Book, BookDTO>();
+    o.CreateMap<User, UserDTO>();
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
