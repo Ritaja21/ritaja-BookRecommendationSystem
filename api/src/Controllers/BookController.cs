@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using api.src.Data;
-using api.src.Models.DTO;
+﻿using api.src.Data;
 using api.src.Models;
+using api.src.Models.DTO;
 using api.src.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.src.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/book")]
     public class BookController : ControllerBase
@@ -76,8 +78,10 @@ namespace api.src.Controllers
         }
 
         //create book
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-
+        
+        
         public async Task<ActionResult<ApiResponse<BookDTO>>> CreateBook(BookCreateDTO bookDTO)
         {
             try
@@ -109,7 +113,10 @@ namespace api.src.Controllers
         }
 
         //update the book details
+        [Authorize(Roles = "Admin")]
+        
         [HttpPut("{id:int}")]
+
 
         public async Task<ActionResult<ApiResponse<BookDTO>>> UpdateBook(int id, BookUpdateDTO bookDTO)
         {
@@ -154,6 +161,7 @@ namespace api.src.Controllers
         }
 
         ////Delete Book
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
 
         public async Task<ActionResult<ApiResponse<BookDTO>>> DeleteBook(int id)
