@@ -57,7 +57,47 @@ namespace api.src.Controllers
                         ex.Message));
             }
         }
-    
 
-}
+        [HttpPost("login")]
+        public async Task<ActionResult<ApiResponse<LoginResponseDTO>>> Login(
+    LoginRequestDTO loginrequestDTO)
+        {
+            try
+            {
+                if (loginrequestDTO == null)
+                {
+                    return BadRequest(
+                        ApiResponse<object>.BadRequest(
+                            "Login data is required"));
+                }
+
+                var loginResponse =
+                    await _authService.LoginAsync(loginrequestDTO);
+
+                if (loginResponse == null)
+                {
+                    return Unauthorized(
+                        ApiResponse<object>.Error(
+                            401,
+                            "Invalid email or password"));
+                }
+
+                var response =
+                    ApiResponse<LoginResponseDTO>.Ok(
+                        "Login successful",
+                        loginResponse);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500,
+                    ApiResponse<object>.Error(
+                        500,
+                        "An error occured during login",
+                        ex.Message));
+            }
+        }
+
+    }
 }

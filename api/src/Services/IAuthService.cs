@@ -6,6 +6,8 @@ namespace api.src.Services
     {
         Task<UserDTO?> RegisterAsync(RegisterRequestDTO registerRequestDTO);
 
+        Task<LoginResponseDTO?> LoginAsync(LoginRequestDTO loginrequestDTO);
+
         Task<bool> IsEmailExistsAsync(string email);
     }
 }

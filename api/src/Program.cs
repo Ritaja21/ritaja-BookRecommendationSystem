@@ -3,11 +3,47 @@ using api.src.Models;
 using api.src.Models.DTO;
 using api.src.Repositories;
 using api.src.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var key = Encoding.ASCII.GetBytes(
+    builder.Configuration["JwtSettings:Secret"]!);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme =
+        JwtBearerDefaults.AuthenticationScheme;
+
+    options.DefaultChallengeScheme =
+        JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+
+    options.SaveToken = true;
+
+    options.TokenValidationParameters =
+        new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+
+            IssuerSigningKey =
+                new SymmetricSecurityKey(key),
+
+            ValidateIssuer = false,
+
+            ValidateAudience = false,
+
+            ClockSkew = TimeSpan.Zero
+        };
+});
 
 // Add services to the container.
 
@@ -66,6 +102,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
