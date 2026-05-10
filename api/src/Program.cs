@@ -3,11 +3,47 @@ using api.src.Models;
 using api.src.Models.DTO;
 using api.src.Repositories;
 using api.src.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var key = Encoding.ASCII.GetBytes(
+    builder.Configuration["JwtSettings:Secret"]!);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme =
+        JwtBearerDefaults.AuthenticationScheme;
+
+    options.DefaultChallengeScheme =
+        JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+
+    options.SaveToken = true;
+
+    options.TokenValidationParameters =
+        new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+
+            IssuerSigningKey =
+                new SymmetricSecurityKey(key),
+
+            ValidateIssuer = false,
+
+            ValidateAudience = false,
+
+            ClockSkew = TimeSpan.Zero
+        };
+});
 
 // Add services to the container.
 
@@ -16,11 +52,17 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddAutoMapper(o =>
 {
     o.CreateMap<BookCreateDTO, Book>();
     o.CreateMap<BookUpdateDTO, Book>();
     o.CreateMap<Book, BookDTO>();
+    o.CreateMap<User, UserDTO>();
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -63,6 +105,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
