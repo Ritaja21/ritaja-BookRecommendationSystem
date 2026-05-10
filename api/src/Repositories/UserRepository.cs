@@ -15,5 +15,13 @@ namespace api.src.Repositories
         {
             return await _db.Users.FindAsync(id);
         }
+
+        public async Task<User?> UpdateUserAsync(User user)
+        {
+            _db.Users.Update(user);
+            await _db.SaveChangesAsync();
+
+            return user;
+        }
     }
 }
