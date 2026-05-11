@@ -63,5 +63,10 @@ namespace api.src.Services
         {
             return await _repo.DeleteBookAsync(id);
         }
+
+        public async Task<List<Book>> SearchBooksAsync(BookSearchDTO searchDTO)
+        {
+            return await _repo.SearchBooksAsync(searchDTO);
+        }
      }
 }

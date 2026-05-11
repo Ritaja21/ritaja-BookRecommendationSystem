@@ -185,5 +185,23 @@ namespace api.src.Controllers
             }
         }
 
+        [HttpGet("search")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<BookDTO>>>> SearchBooks([FromQuery] BookSearchDTO searchDTO)
+        {
+            try
+            {
+                var books = await _service.SearchBooksAsync(searchDTO);
+
+                var bookDTOs = _mapper.Map<List<BookDTO>>(books);
+
+                return Ok(
+                    ApiResponse<IEnumerable<BookDTO>>.Ok("Books fetched successfully", bookDTOs));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<object>.Error(500, "Failed to fetch books", ex.Message));
+            }
+        }
+
     }
 }

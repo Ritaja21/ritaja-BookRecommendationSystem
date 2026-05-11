@@ -9,5 +9,6 @@ namespace api.src.Services
         Task<Book> CreateBookAsync(BookCreateDTO bookDTO);
         Task<Book?> UpdateBookAsync(int id, BookUpdateDTO bookDTO);
         Task<bool> DeleteBookAsync(int id);
+        Task<List<Book>> SearchBooksAsync(BookSearchDTO searchDTO);
     }
 }
