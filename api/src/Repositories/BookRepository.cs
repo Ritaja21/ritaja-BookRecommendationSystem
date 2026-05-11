@@ -1,5 +1,6 @@
 ﻿using api.src.Data;
 using api.src.Models;
+using api.src.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 namespace api.src.Repositories
 {
@@ -66,6 +67,31 @@ namespace api.src.Repositories
             await _db.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<List<Book>> SearchBooksAsync(BookSearchDTO searchDTO)
+        {
+            var books = _db.Books.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchDTO.Query))
+            {
+                books = books.Where(b =>
+                    b.Title.ToLower().Contains(searchDTO.Query.Trim().ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(searchDTO.Author))
+            {
+                books = books.Where(b =>
+                    b.Author.ToLower().Contains(searchDTO.Author.Trim().ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(searchDTO.Genre))
+            {
+                books = books.Where(b =>
+                    b.Genre.ToLower().Contains(searchDTO.Genre.Trim().ToLower()));
+            }
+
+            return await books.ToListAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using api.src.Models;
+using api.src.Models.DTO;
 namespace api.src.Repositories
 {
     public interface IBookRepository
@@ -12,6 +13,7 @@ namespace api.src.Repositories
         Task<Book?> UpdateBookAsync(Book book);
 
         Task<bool> DeleteBookAsync(int id);
+        Task<List<Book>> SearchBooksAsync(BookSearchDTO searchDTO);
     }
 
 }
