@@ -56,6 +56,8 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserBookRepository, UserBookRepository>();
+builder.Services.AddScoped<IUserBookService, UserBookService>();
 
 builder.Services.AddAutoMapper(o =>
 {
