@@ -25,18 +25,59 @@ namespace api.src.Controllers
         [HttpPost("read")]
         public async Task<ActionResult<ApiResponse<object>>> MarkBookAsRead(UserReadDTO userReadDTO)
         {
-            var UserIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (UserIdClaim == null)
+            try
             {
-                return Unauthorized(ApiResponse<object>.Error(401, "Unauthorized Access"));
+                var UserIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (UserIdClaim == null)
+                {
+                    return Unauthorized(ApiResponse<object>.Error(401, "Unauthorized Access"));
+                }
+
+                int userId = int.Parse(UserIdClaim);
+
+                var result = await _service.MarkBookAsReadAsync(userId, userReadDTO);
+
+                return Ok(ApiResponse<object>.Ok("Booked marked as read", result));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    ApiResponse<object>.Error(
+                        500,
+                        "Error marking book as read",
+                        ex.Message));
             }
 
-            int userId = int.Parse(UserIdClaim);
+        }
 
-            var result = await _service.MarkBookAsReadAsync(userId, userReadDTO);
+        [HttpPost("rate")]
+        public async Task<ActionResult<ApiResponse<object>>> RateBookAsync(RateBookDTO rateBookDTO)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim == null)
+                {
+                    return Unauthorized(
+                       ApiResponse<object>.Error(
+                           401,
+                           "Unauthorized"));
+                }
+                int userId = int.Parse(userIdClaim);
 
-            return Ok(ApiResponse<object>.Ok("Booked marked as read", result));
+                var result = await _service.RateBookAsync(userId, rateBookDTO);
+
+                return Ok(
+                   ApiResponse<object>.Ok(
+                       "Book rated successfully",
+                       result));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<object>.Error(500, "Failed to rate book", ex.Message));
+            }
         }
 
     }

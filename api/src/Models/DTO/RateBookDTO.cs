@@ -8,6 +8,6 @@ namespace api.src.Models.DTO
         [Required]
         public int BookId { get; set; }
         [Range(1,5)]
-        public int Rating { get; set; }
+        public double Rating { get; set; }
     }
 }

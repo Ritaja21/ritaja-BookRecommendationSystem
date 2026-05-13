@@ -6,7 +6,7 @@ namespace api.src.Services
     public interface IUserBookService
     {
         Task<UserBook> MarkBookAsReadAsync(int userId, UserReadDTO userReadDTO);
-        //Task<UserBook> RateBookAsync(RateBookDTO rateBookDTO);
+        Task<UserBook> RateBookAsync(int userId, RateBookDTO rateBookDTO);
         //Task<List<UserBook>> GetUserBookHistoryAsync(int userId);
 
     }

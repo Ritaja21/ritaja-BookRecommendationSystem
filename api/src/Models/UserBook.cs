@@ -12,7 +12,7 @@ namespace api.src.Models
         [Required]
         public int BookId { get; set; }
         [Range(1,5)]
-        public int? Rating { get; set; }
+        public double? Rating { get; set; }
         public bool IsRead { get; set; } = false;
 
         [ForeignKey("UserId")]
