@@ -63,7 +63,17 @@ builder.Services.AddAutoMapper(o =>
 {
     o.CreateMap<BookCreateDTO, Book>();
     o.CreateMap<BookUpdateDTO, Book>();
-    o.CreateMap<Book, BookDTO>();
+    o.CreateMap<Book, BookDTO>()
+     .ForMember(dest => dest.AverageRating,
+         opt => opt.MapFrom(src =>
+             src.UserBooks.Any(ub => ub.Rating.HasValue)
+                 ? Math.Round(
+                     src.UserBooks
+                         .Where(ub => ub.Rating.HasValue)
+                         .Average(ub => ub.Rating!.Value),
+                     2)
+                 : (double?)null
+         ));
     o.CreateMap<User, UserDTO>();
     o.CreateMap<UserBook, UserHistoryDTO>()
     .ForMember(dest => dest.Title,
