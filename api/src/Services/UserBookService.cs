@@ -52,5 +52,10 @@ namespace api.src.Services
 
             return await _repo.CreateUserBookAsync(userBook);
         }
+
+        public async Task<List<UserBook>> GetUserBookHistoryAsync(int userId)
+        {
+            return await _repo.GetUserHistoryAsync(userId);
+        }
     }
 }

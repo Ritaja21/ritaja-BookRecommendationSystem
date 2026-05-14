@@ -80,5 +80,42 @@ namespace api.src.Controllers
             }
         }
 
-    }
+        [HttpGet("history")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<UserHistoryDTO>>>> GetHistory()
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userIdClaim == null)
+                {
+                    return Unauthorized(
+                        ApiResponse<object>.Error(
+                            401,
+                            "Unauthorized"));
+                }
+
+                int userId = int.Parse(userIdClaim);
+
+                var history = await _service.GetUserBookHistoryAsync(userId);
+
+                var historyDTOs = _mapper.Map<List<UserHistoryDTO>>(history);
+
+                return Ok(
+                    ApiResponse<IEnumerable<UserHistoryDTO>>.Ok(
+                        "User history fetched successfully",
+                        historyDTOs));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    ApiResponse<object>.Error(
+                        500,
+                        "Error fetching user history",
+                        ex.Message));
+            }
+        }
+    
+}
 }

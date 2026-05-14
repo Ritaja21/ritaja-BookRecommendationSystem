@@ -65,6 +65,11 @@ builder.Services.AddAutoMapper(o =>
     o.CreateMap<BookUpdateDTO, Book>();
     o.CreateMap<Book, BookDTO>();
     o.CreateMap<User, UserDTO>();
+    o.CreateMap<UserBook, UserHistoryDTO>()
+    .ForMember(dest => dest.Title,
+        opt => opt.MapFrom(src => src.Book.Title))
+    .ForMember(dest => dest.Author,
+        opt => opt.MapFrom(src => src.Book.Author));
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>

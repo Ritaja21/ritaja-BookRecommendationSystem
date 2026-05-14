@@ -7,7 +7,7 @@ namespace api.src.Services
     {
         Task<UserBook> MarkBookAsReadAsync(int userId, UserReadDTO userReadDTO);
         Task<UserBook> RateBookAsync(int userId, RateBookDTO rateBookDTO);
-        //Task<List<UserBook>> GetUserBookHistoryAsync(int userId);
+        Task<List<UserBook>> GetUserBookHistoryAsync(int userId);
 
     }
 }
