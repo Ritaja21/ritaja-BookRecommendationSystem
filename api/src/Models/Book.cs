@@ -18,6 +18,8 @@ namespace api.src.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
 
+        public ICollection<UserBook> UserBooks { get; set; } = new List<UserBook>();
+
 
     }
 }

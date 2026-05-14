@@ -15,13 +15,13 @@ namespace api.src.Repositories
         //get all books
         public async Task<List<Book>> GetBooksAsync()
         {
-            return await _db.Books.ToListAsync();
+            return await _db.Books.Include(b => b.UserBooks).ToListAsync();
         }
 
         //get book by id
         public async Task<Book?> GetBookByIdAsync(int id)
         {
-            return await _db.Books.FirstOrDefaultAsync(u => u.BookId == id);
+            return await _db.Books.Include(b => b.UserBooks).FirstOrDefaultAsync(b => b.BookId == id);
         }
 
         //get book by title 
@@ -71,7 +71,7 @@ namespace api.src.Repositories
 
         public async Task<List<Book>> SearchBooksAsync(BookSearchDTO searchDTO)
         {
-            var books = _db.Books.AsQueryable();
+            var books = _db.Books.Include(b => b.UserBooks).AsQueryable();
 
             if (!string.IsNullOrEmpty(searchDTO.Query))
             {
@@ -88,7 +88,7 @@ namespace api.src.Repositories
             if (!string.IsNullOrEmpty(searchDTO.Genre))
             {
                 books = books.Where(b =>
-                    b.Genre.ToLower().Contains(searchDTO.Genre.Trim().ToLower()));
+                    b.Genre!= null && b.Genre.ToLower().Contains(searchDTO.Genre.Trim().ToLower()));
             }
 
             return await books.ToListAsync();

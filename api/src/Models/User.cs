@@ -19,5 +19,6 @@ namespace api.src.Models
         public required string Role { get; set; } = "Customer";
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public ICollection<UserBook> UserBooks { get; set; } = new List<UserBook>();
     }
 }
