@@ -58,6 +58,8 @@ builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserBookRepository, UserBookRepository>();
 builder.Services.AddScoped<IUserBookService, UserBookService>();
+builder.Services.AddScoped<IRecommendationService, RecommendationService>();
+builder.Services.AddHttpClient();
 
 builder.Services.AddAutoMapper(o =>
 {
