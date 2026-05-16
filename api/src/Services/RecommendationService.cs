@@ -62,31 +62,31 @@ namespace api.src.Services
 
             responseDTO.InternalRecommendations = _mapper.Map<List<BookDTO>>(books);
 
-            //GEMINI Api call
+            // Groq API call
             try
             {
-                var apikey = _configuration["GeminiSettings:ApiKey"];
-                var prompt = $@" Suggest 5 books.
-                                 Genre: {requestDTO.Genre}
-                                 User Interest: {requestDTO.Prompt}
-                                 Return ONLY book names in separate lines.";
+                var apikey = _configuration["GroqSettings:ApiKey"];
+
+                var prompt = $@"Suggest 5 books.
+                Genre: {requestDTO.Genre}
+                User Interest: {requestDTO.Prompt}
+                Return ONLY in this exact format, one book per line:
+                Title | Author
+                No numbering, no extra text, no explanations.";
+
                 var requestBody = new
                 {
-                    contents = new[]
-                   {
-                        new
-                        {
-                            parts = new[]
-                            {
-                                new
-                                {
-                                    text = prompt
-                                }
-                            }
-                        }
-                    }
+                    model = "llama-3.3-70b-versatile",
+                    messages = new[]
+                    {
+            new { role = "user", content = prompt }
+        },
+                    max_tokens = 200,
+                    temperature = 0.7
                 };
+
                 var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apikey}");
 
                 var jsonContent = new StringContent(
                     JsonSerializer.Serialize(requestBody),
@@ -94,8 +94,8 @@ namespace api.src.Services
                     "application/json");
 
                 var responseMessage = await client.PostAsync(
-                   $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={apikey}",
-                   jsonContent);
+                    "https://api.groq.com/openai/v1/chat/completions",
+                    jsonContent);
 
                 responseMessage.EnsureSuccessStatusCode();
 
@@ -104,12 +104,11 @@ namespace api.src.Services
                 using JsonDocument document = JsonDocument.Parse(jsonResponse);
 
                 var aiText = document
-                 .RootElement
-                 .GetProperty("candidates")[0]
-                 .GetProperty("content")
-                 .GetProperty("parts")[0]
-                 .GetProperty("text")
-                 .GetString();
+                    .RootElement
+                    .GetProperty("choices")[0]
+                    .GetProperty("message")
+                    .GetProperty("content")
+                    .GetString();
 
                 if (!string.IsNullOrEmpty(aiText))
                 {
@@ -122,18 +121,23 @@ namespace api.src.Services
 
                     foreach (var aiBook in aiBooks)
                     {
+                        var parts = aiBook.Split('|', 2);
+                        var title = parts[0].Trim();
+                        var author = parts.Length > 1 ? parts[1].Trim() : string.Empty;
+
                         bool existsInDb = books.Any(b =>
-                            b.Title.ToLower() == aiBook.ToLower());
+                            b.Title.ToLower() == title.ToLower());
 
                         if (!existsInDb)
                         {
                             responseDTO.ExternalRecommendations.Add(
                                 new RecommendationBookDTO
                                 {
-                                    Title = aiBook,
+                                    Title = title,
+                                    Author = author,
                                     IsInternal = false,
                                     SearchUrl =
-                                        $"https://www.google.com/search?q={Uri.EscapeDataString(aiBook + " book")}"
+                                        $"https://www.google.com/search?q={Uri.EscapeDataString(title + " book")}"
                                 });
                         }
                     }
@@ -141,7 +145,7 @@ namespace api.src.Services
             }
             catch
             {
-                
+                throw;
             }
 
             return responseDTO;
