@@ -1,4 +1,5 @@
 using api.src.Data;
+using api.src.Middlewares;
 using api.src.Models;
 using api.src.Models.DTO;
 using api.src.Repositories;
@@ -124,6 +125,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 
 app.UseAuthorization();
