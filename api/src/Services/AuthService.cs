@@ -14,12 +14,14 @@ namespace api.src.Services
         private readonly IAuthRepository _repo;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(IAuthRepository repo, IMapper mapper, IConfiguration configuration)
+        public AuthService(IAuthRepository repo, IMapper mapper, IConfiguration configuration, ILogger<AuthService> logger)
         {
             _repo = repo;
             _mapper = mapper;
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task<bool> IsEmailExistsAsync(string email)
@@ -31,8 +33,11 @@ namespace api.src.Services
         {
             try
             {
+                _logger.LogInformation("Register attempt for email: {Email}",registerRequestDTO.Email);
+
                 if (await _repo.IsEmailExistsAsync(registerRequestDTO.Email))
                 {
+                    _logger.LogWarning("Registration failed. Email already exists: {Email}",registerRequestDTO.Email);
                     throw new InvalidOperationException(
                         $"User with email '{registerRequestDTO.Email}' already exists");
                 }
@@ -53,10 +58,14 @@ namespace api.src.Services
 
                 var createdUser = await _repo.RegisterAsync(user);
 
+                _logger.LogInformation("User registered successfully: {Email}",createdUser.Email);
+
                 return _mapper.Map<UserDTO>(createdUser);
             }
             catch (Exception ex)
             {
+                _logger.LogError( ex,"Error occurred during user registration");
+
                 throw new InvalidOperationException(
                     "An unexpected error occured during user registration", ex);
             }
@@ -66,10 +75,13 @@ namespace api.src.Services
         {
             try
             {
+                _logger.LogInformation("Login attempt for email: {Email}",loginrequestDTO.Email);
+
                 var user = await _repo.GetUserByEmailAsync(loginrequestDTO.Email);
 
                 if (user == null)
                 {
+                    _logger.LogWarning("Login failed. User not found: {Email}",loginrequestDTO.Email);
                     return null;
                 }
 
@@ -78,10 +90,12 @@ namespace api.src.Services
 
                 if (!isPasswordValid)
                 {
+                    _logger.LogWarning("Login failed. Invalid password for email: {Email}",loginrequestDTO.Email);
                     return null;
                 }
 
                 var token = GenerateJwtToken(user);
+                _logger.LogInformation("User logged in successfully: {Email}",user.Email);
 
                 return new LoginResponseDTO
                 {
@@ -91,6 +105,7 @@ namespace api.src.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex,"Error occurred during login");
                 throw new InvalidOperationException(
                     "An unexpected error occured during login", ex);
             }

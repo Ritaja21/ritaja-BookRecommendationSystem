@@ -14,18 +14,24 @@ namespace api.src.Services
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+        private readonly ILogger<RecommendationService> _logger;
 
-        public RecommendationService(AppDbContext db, IHttpClientFactory httpClientFactory, IConfiguration configuration,IMapper mapper)
+        public RecommendationService(AppDbContext db, IHttpClientFactory httpClientFactory, IConfiguration configuration,IMapper mapper, ILogger<RecommendationService> logger)
         {
             _db = db;
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<RecommendationResponseDTO> GetRecommendationAsync(RecommendationRequestDTO requestDTO)
         {
             RecommendationResponseDTO responseDTO = new();
+            _logger.LogInformation("Recommendation request received. Genre: {Genre}, MinimumRating: {MinimumRating}, Prompt: {Prompt}",
+               requestDTO.Genre ?? "Any",
+               requestDTO.MinimumRating?.ToString() ?? "None",
+               requestDTO.Prompt ?? "None");
 
             //internal database filtering
 
@@ -61,6 +67,7 @@ namespace api.src.Services
             //internal recommendation from database
 
             responseDTO.InternalRecommendations = _mapper.Map<List<BookDTO>>(books);
+            _logger.LogInformation("Internal recommendations fetched at {Time}: {Count} books.", DateTime.UtcNow, responseDTO.InternalRecommendations.Count);
 
             // Groq API call
             try
@@ -142,9 +149,12 @@ namespace api.src.Services
                         }
                     }
                 }
+                _logger.LogInformation("External recommendations fetched at {Time}: {Count} books.", DateTime.UtcNow, responseDTO.ExternalRecommendations.Count);
             }
-            catch
+
+            catch (HttpRequestException ex)
             {
+                _logger.LogError(ex, "Groq API call failed at {Time}. Status: {Status}", DateTime.UtcNow, ex.StatusCode);
                 throw;
             }
 
