@@ -31,8 +31,7 @@ namespace api.src.Services
 
         public async Task<UserDTO?> RegisterAsync(RegisterRequestDTO registerRequestDTO)
         {
-            try
-            {
+            
                 _logger.LogInformation("Register attempt for email: {Email}",registerRequestDTO.Email);
 
                 if (await _repo.IsEmailExistsAsync(registerRequestDTO.Email))
@@ -61,20 +60,12 @@ namespace api.src.Services
                 _logger.LogInformation("User registered successfully: {Email}",createdUser.Email);
 
                 return _mapper.Map<UserDTO>(createdUser);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError( ex,"Error occurred during user registration");
-
-                throw new InvalidOperationException(
-                    "An unexpected error occured during user registration", ex);
-            }
+           
         }
 
         public async Task<LoginResponseDTO?> LoginAsync(LoginRequestDTO loginrequestDTO)
         {
-            try
-            {
+           
                 _logger.LogInformation("Login attempt for email: {Email}",loginrequestDTO.Email);
 
                 var user = await _repo.GetUserByEmailAsync(loginrequestDTO.Email);
@@ -102,13 +93,7 @@ namespace api.src.Services
                     Token = token,
                     UserDTO = _mapper.Map<UserDTO>(user)
                 };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex,"Error occurred during login");
-                throw new InvalidOperationException(
-                    "An unexpected error occured during login", ex);
-            }
+           
         }
 
         private string GenerateJwtToken(User user)
