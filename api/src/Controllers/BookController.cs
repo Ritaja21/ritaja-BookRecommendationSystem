@@ -27,20 +27,12 @@ namespace api.src.Controllers
         [HttpGet]
 
         public async Task<ActionResult<ApiResponse<List<BookDTO>>>> GetBook()
-        {
-            try
-            {
+        { 
+            
                 var books = await _service.GetBooksAsync();
                 var bookDTOs = _mapper.Map<List<BookDTO>>(books);
-                return Ok(ApiResponse<List<BookDTO>>.Ok("Books retrieved successfully", bookDTOs));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500,
-                    ApiResponse<object>.Error(500, "Error fetching books", ex.Message));
-               
-            }
-
+                return Ok(ApiResponse<List<BookDTO>>.Ok("Books retrieved successfully", bookDTOs));   
+              
          }
 
         //get books by id
@@ -49,8 +41,7 @@ namespace api.src.Controllers
 
         public async Task<ActionResult<ApiResponse<BookDTO>>> GetBookById(int id)
         {
-            try
-            {
+         
                 if (id <= 0)
                 {
                     return BadRequest(ApiResponse<object>.BadRequest("Book ID should be greater than 0"));
@@ -68,13 +59,6 @@ namespace api.src.Controllers
 
                 return Ok(ApiResponse<object>.Ok("Book fetched successfully", bookDTO));
                
-
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500,
-                    ApiResponse<object>.Error(500, "Error retrieving book", ex.Message));
-            }
         }
 
         //create book
@@ -84,8 +68,7 @@ namespace api.src.Controllers
         
         public async Task<ActionResult<ApiResponse<BookDTO>>> CreateBook(BookCreateDTO bookDTO)
         {
-            try
-            {
+          
                 if (bookDTO == null)
                 {
                     return BadRequest(ApiResponse<object>.BadRequest("Book Data is Required"));
@@ -98,18 +81,6 @@ namespace api.src.Controllers
 
                 return CreatedAtAction(nameof(GetBookById), new { id = book.BookId }, ApiResponse<object>.CreatedAt("Book created successfully", bookDTOresult));
                 
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message.Contains("already exists"))
-                {
-                    return Conflict(ApiResponse<object>.Conflict("Book already exists"));
-                   
-                }
-                return StatusCode(500,
-                    ApiResponse<object>.Error(500, "Failed to create book", ex.Message));
-              
-            }
         }
 
         //update the book details
@@ -119,9 +90,7 @@ namespace api.src.Controllers
 
 
         public async Task<ActionResult<ApiResponse<BookDTO>>> UpdateBook(int id, BookUpdateDTO bookDTO)
-        {
-            try
-            {
+        { 
                 if (bookDTO == null)
                 {
                     return BadRequest(ApiResponse<object>.BadRequest("Book data is required"));
@@ -146,18 +115,6 @@ namespace api.src.Controllers
 
                 return Ok(ApiResponse<object>.Ok("Book data is updated successfully", bookDTOresult));
               
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message.Contains("already exists"))
-                {
-                    return Conflict(ApiResponse<object>.Conflict("Book with this name already exists"));
-                   
-                }
-                return StatusCode(500,
-                    ApiResponse<object>.Error(500, "Failed to update book data", ex.Message));
-               
-            }
         }
 
         ////Delete Book
@@ -166,9 +123,6 @@ namespace api.src.Controllers
 
         public async Task<ActionResult<ApiResponse<BookDTO>>> DeleteBook(int id)
         {
-            try
-            {
-
                 var isDeleted = await _service.DeleteBookAsync(id);
 
                 if (!isDeleted)
@@ -177,31 +131,20 @@ namespace api.src.Controllers
                 }
 
                 return Ok(ApiResponse<object>.NoContent());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500,
-                    ApiResponse<object>.Error(500,"Failed to delete book", ex.Message));
-            }
         }
 
         [HttpGet("search")]
         public async Task<ActionResult<ApiResponse<IEnumerable<BookDTO>>>> SearchBooks([FromQuery] BookSearchDTO searchDTO)
         {
-            try
-            {
+          
                 var books = await _service.SearchBooksAsync(searchDTO);
 
                 var bookDTOs = _mapper.Map<List<BookDTO>>(books);
 
                 return Ok(
                     ApiResponse<IEnumerable<BookDTO>>.Ok("Books fetched successfully", bookDTOs));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<object>.Error(500, "Failed to fetch books", ex.Message));
-            }
         }
 
+      
     }
 }

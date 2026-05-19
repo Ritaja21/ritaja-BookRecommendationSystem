@@ -9,19 +9,34 @@ namespace api.src.Services
     public class UserBookService : IUserBookService
     {
         private readonly IUserBookRepository _repo;
-
-        public UserBookService(IUserBookRepository repo)
+        private readonly ILogger<UserBookService> _logger;
+       
+        public UserBookService(IUserBookRepository repo, ILogger<UserBookService> logger)
         {
             _repo = repo;
+            _logger = logger;
         }
 
         public async Task<UserBook> MarkBookAsReadAsync(int userId, UserReadDTO userReadDTO)
         {
+            _logger.LogInformation(
+        "User {UserId} marked book {BookId} as read",
+        userId,
+        userReadDTO.BookId);
             var existingUserBook = await _repo.GetUserBookAsync(userId, userReadDTO.BookId);
             if (existingUserBook != null)
             {
                 existingUserBook.IsRead = true;
-                return await _repo.UpdateUserBookAsync(existingUserBook);
+
+                var updatedUserBook =
+                    await _repo.UpdateUserBookAsync(existingUserBook);
+
+                _logger.LogInformation(
+                    "Updated existing read history for user {UserId} and book {BookId}",
+                    userId,
+                    userReadDTO.BookId);
+
+                return updatedUserBook;
             }
 
             UserBook userbook = new()
@@ -31,16 +46,37 @@ namespace api.src.Services
                 IsRead = true
             };
 
-            return await _repo.CreateUserBookAsync(userbook);
+            var createdUserBook =
+        await _repo.CreateUserBookAsync(userbook);
+
+            _logger.LogInformation(
+                "Created new read history for user {UserId} and book {BookId}",
+                userId,
+                userReadDTO.BookId);
+
+            return createdUserBook;
         }
 
         public async Task<UserBook> RateBookAsync(int userId, RateBookDTO rateBookDTO)
         {
+            _logger.LogInformation(
+       "User {UserId} rating book {BookId} with rating {Rating}",
+       userId,
+       rateBookDTO.BookId,
+       rateBookDTO.Rating);
             var existingUserBook = await _repo.GetUserBookAsync(userId, rateBookDTO.BookId);
             if (existingUserBook != null)
             {
                 existingUserBook.Rating = rateBookDTO.Rating;
-                return await _repo.UpdateUserBookAsync(existingUserBook);
+                var updatedUserBook =
+            await _repo.UpdateUserBookAsync(existingUserBook);
+
+                _logger.LogInformation(
+                    "Updated rating for user {UserId} and book {BookId}",
+                    userId,
+                    rateBookDTO.BookId);
+
+                return updatedUserBook;
             }
 
             UserBook userBook = new()
@@ -50,7 +86,15 @@ namespace api.src.Services
                 Rating = rateBookDTO.Rating
             };
 
-            return await _repo.CreateUserBookAsync(userBook);
+            var createdUserBook =
+        await _repo.CreateUserBookAsync(userBook);
+
+            _logger.LogInformation(
+                "Created new rating for user {UserId} and book {BookId}",
+                userId,
+                rateBookDTO.BookId);
+
+            return createdUserBook;
         }
 
         public async Task<List<UserBook>> GetUserBookHistoryAsync(int userId)

@@ -1,4 +1,6 @@
 using api.src.Data;
+using api.src.Mapping;
+using api.src.Middlewares;
 using api.src.Models;
 using api.src.Models.DTO;
 using api.src.Repositories;
@@ -61,28 +63,7 @@ builder.Services.AddScoped<IUserBookService, UserBookService>();
 builder.Services.AddScoped<IRecommendationService, RecommendationService>();
 builder.Services.AddHttpClient();
 
-builder.Services.AddAutoMapper(o =>
-{
-    o.CreateMap<BookCreateDTO, Book>();
-    o.CreateMap<BookUpdateDTO, Book>();
-    o.CreateMap<Book, BookDTO>()
-     .ForMember(dest => dest.AverageRating,
-         opt => opt.MapFrom(src =>
-             src.UserBooks.Any(ub => ub.Rating.HasValue)
-                 ? Math.Round(
-                     src.UserBooks
-                         .Where(ub => ub.Rating.HasValue)
-                         .Average(ub => ub.Rating!.Value),
-                     2)
-                 : (double?)null
-         ));
-    o.CreateMap<User, UserDTO>();
-    o.CreateMap<UserBook, UserHistoryDTO>()
-    .ForMember(dest => dest.Title,
-        opt => opt.MapFrom(src => src.Book.Title))
-    .ForMember(dest => dest.Author,
-        opt => opt.MapFrom(src => src.Book.Author));
-});
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -124,6 +105,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 
 app.UseAuthorization();

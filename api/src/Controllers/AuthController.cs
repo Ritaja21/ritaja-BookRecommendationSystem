@@ -19,8 +19,7 @@ namespace api.src.Controllers
         public async Task<ActionResult<ApiResponse<UserDTO>>> Register(
            RegisterRequestDTO registerRequestDTO)
         {
-            try
-            {
+           
                 if (registerRequestDTO == null)
                 {
                     return BadRequest(
@@ -42,28 +41,13 @@ namespace api.src.Controllers
                     user);
 
                 return StatusCode(201, response);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(
-                    ApiResponse<object>.Conflict(ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500,
-                    ApiResponse<object>.Error(
-                        500,
-                        "An error occured while registering user",
-                        ex.Message));
-            }
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<ApiResponse<LoginResponseDTO>>> Login(
     LoginRequestDTO loginrequestDTO)
         {
-            try
-            {
+           
                 if (loginrequestDTO == null)
                 {
                     return BadRequest(
@@ -88,16 +72,8 @@ namespace api.src.Controllers
                         loginResponse);
 
                 return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500,
-                    ApiResponse<object>.Error(
-                        500,
-                        "An error occured during login",
-                        ex.Message));
-            }
         }
 
+      
     }
 }

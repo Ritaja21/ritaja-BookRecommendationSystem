@@ -20,15 +20,11 @@ namespace api.src.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResponse<RecommendationResponseDTO>>> GetRecommendation(RecommendationRequestDTO request)
         {
-            try
-            {
+         
                 var recommendations = await _service.GetRecommendationAsync(request);
                 return Ok(ApiResponse<object>.Ok("Recommendations fetched successfully", recommendations));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<object>.Error(500, "Failed to fetch recommendations", ex.Message));
-            }
+            
+           
         }
     }
 }
