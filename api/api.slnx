@@ -1,4 +1,6 @@
 <Solution>
   <Project Path="api.csproj" />
-  <Project Path="test/BookRecommendation.Tests/BookRecommendation.Tests.csproj" Id="205ac204-ce94-4e15-88c8-3af7589925cb" />
+  <Project Path="test/BookRecommendation.Tests/BookRecommendation.Tests.csproj" Id="205ac204-ce94-4e15-88c8-3af7589925cb">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
 </Solution>
