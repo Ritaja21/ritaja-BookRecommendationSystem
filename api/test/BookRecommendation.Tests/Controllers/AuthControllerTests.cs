@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BookRecommendation.Tests.Controllers
 {
-    internal class AuthControllerTest
+    internal class AuthControllerTests
     {
     }
 }
