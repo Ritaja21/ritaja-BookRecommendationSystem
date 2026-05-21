@@ -25,4 +25,15 @@
     <PackageReference Include="Scalar.AspNetCore" Version="2.14.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="test\" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="test\**" />
+		<Content Remove="test\**" />
+		<EmbeddedResource Remove="test\**" />
+		<None Remove="test\**" />
+	</ItemGroup>
+
 </Project>
