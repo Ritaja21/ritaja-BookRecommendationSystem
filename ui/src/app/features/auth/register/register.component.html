@@ -1,1 +1,36 @@
-<p>register works!</p>
+<div class="auth-wrap">
+    <div class="auth-card">
+
+        <div class="auth-logo">📚 BookRec</div>
+        <div class="auth-sub">Create your customer account</div>
+
+        <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input class="form-input" type="text" placeholder="John Doe" [(ngModel)]="name" />
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-input" type="email" placeholder="you@example.com" [(ngModel)]="email" />
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Password</label>
+            <input class="form-input" type="password" placeholder="••••••••" [(ngModel)]="password" />
+        </div>
+
+        <div class="error-msg" *ngIf="errorMessage">
+            {{ errorMessage }}
+        </div>
+
+        <button class="btn btn-primary" (click)="onRegister()">
+            Create Account
+        </button>
+
+        <div class="auth-footer">
+            Already have an account?
+            <a routerLink="/login">Sign In</a>
+        </div>
+
+    </div>
+</div>
