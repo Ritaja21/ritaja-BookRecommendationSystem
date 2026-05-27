@@ -54,5 +54,10 @@ export class AuthService {
     return user ? JSON.parse(user) : null;
   }
 
+  getRole(): string | null {
+    const user = this.getUser();
+    return user?.role || null;
+  }
+
 }
 
