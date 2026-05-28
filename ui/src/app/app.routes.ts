@@ -3,7 +3,7 @@ import { HomeComponent } from './features/home/home.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-dashboard.component';
-import { CustomerDasboardComponent } from './features/customer/customer-dasboard/customer-dasboard.component';
+import { CustomerDashboardComponent } from './features/customer/customer-dashboard/customer-dashboard.component';
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { customerGuard } from './core/guards/customer.guard';
@@ -39,7 +39,7 @@ export const routes: Routes = [{
     component: CustomerLayoutComponent,
     canActivate: [authGuard, customerGuard],
     children: [
-        { path: "dashboard", component: CustomerDasboardComponent },
+        { path: "dashboard", component: CustomerDashboardComponent },
         { path: "books", component: CustomerBooksComponent },
         { path: "recommendation", component: RecommendationComponent }
     ]
