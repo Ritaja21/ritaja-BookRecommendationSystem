@@ -9,6 +9,9 @@ import { adminGuard } from './core/guards/admin.guard';
 import { customerGuard } from './core/guards/customer.guard';
 import { AdminLayoutComponent } from './features/admin/admin-layout/admin-layout.component';
 import { CustomerLayoutComponent } from './features/customer/customer-layout/customer-layout.component';
+import { AdminBooksComponent } from './features/admin/admin-books/admin-books.component';
+import { CustomerBooksComponent } from './features/customer/customer-books/customer-books.component';
+import { RecommendationComponent } from './features/customer/recommendation/recommendation.component';
 
 export const routes: Routes = [{
     path: "",
@@ -27,7 +30,8 @@ export const routes: Routes = [{
     component: AdminLayoutComponent,
     canActivate: [authGuard, adminGuard],
     children: [
-        { path: "dashboard", component: AdminDashboardComponent }
+        { path: "dashboard", component: AdminDashboardComponent },
+        { path: "books", component: AdminBooksComponent }
     ]
 },
 {
@@ -35,6 +39,8 @@ export const routes: Routes = [{
     component: CustomerLayoutComponent,
     canActivate: [authGuard, customerGuard],
     children: [
-        { path: "dashboard", component: CustomerDasboardComponent }
+        { path: "dashboard", component: CustomerDasboardComponent },
+        { path: "books", component: CustomerBooksComponent },
+        { path: "recommendation", component: RecommendationComponent }
     ]
 }];
