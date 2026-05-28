@@ -30,7 +30,16 @@ export class LoginComponent {
     this.authService.login(loginData).subscribe({
       next: (response) => {
         console.log(response);
-        this.router.navigate(['/']);
+
+        const user = response.data.userDTO;
+
+        if (user.role === 'Admin') {
+          this.router.navigate(['/admin/dashboard']);
+        }
+        else {
+          this.router.navigate(['/customer/dashboard']);
+        }
+
       },
       error: (error) => {
         console.log(error);

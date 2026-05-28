@@ -1,0 +1,13 @@
+<nav class="navbar">
+    <div class="nav-logo">📚 BookRec</div>
+
+    <div class="nav-right">
+        <span class="badge" [class.admin]="isAdmin">
+            {{ isAdmin ? 'Admin' : 'Customer' }}
+        </span>
+        <div class="avatar" [class.admin]="isAdmin">
+            {{ getInitials() }}
+        </div>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+</nav>
