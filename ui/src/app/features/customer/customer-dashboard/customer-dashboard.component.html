@@ -1,0 +1,48 @@
+<div class="dashboard">
+
+    <!-- Profile Card -->
+    <div class="profile-card">
+        <div class="profile-avatar">{{ getInitials() }}</div>
+        <div class="profile-info">
+            <div class="profile-top">
+                <h2>{{ user?.name }}</h2>
+                <button class="edit-btn">Edit Profile</button>
+            </div>
+            <p>{{ user?.email }}</p>
+            <span class="role-tag">Customer</span>
+        </div>
+    </div>
+
+    <!-- Welcome Card -->
+    <div class="welcome-card">
+        <div class="welcome-text">
+            <h3>Welcome back, {{ getFirstName() }} 👋</h3>
+            <p>Track your reading, rate books you love, and discover new ones with AI-powered recommendations.</p>
+        </div>
+        <a routerLink="/customer/books" class="btn btn-primary">Browse Books →</a>
+    </div>
+
+    <!-- Reading History -->
+    <div class="card">
+        <div class="section-label">Reading History</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                    <th>Status</th>
+                    <th>Your Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="5" class="empty-row">
+                        No reading history yet. Start by browsing books!
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

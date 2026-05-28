@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:host {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Profile Card */
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #c0392b;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lora', serif;
+    font-size: 24px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.profile-top h2 {
+    font-family: 'Lora', serif;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.edit-btn {
+    padding: 7px 16px;
+    border-radius: 8px;
+    border: 1.5px solid #2d6a4f;
+    background: transparent;
+    color: #2d6a4f;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+}
+
+.edit-btn:hover {
+    background: #e8f4ee;
+}
+
+.profile-info p {
+    color: #7a7068;
+    font-size: 13px;
+}
+
+.role-tag {
+    display: inline-block;
+    background: #fdf0ef;
+    color: #c0392b;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-top: 6px;
+}
+
+/* Welcome Card */
+.welcome-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #e2ddd6;
+    border-radius: 12px;
+    padding: 24px 28px;
+    gap: 20px;
+}
+
+.welcome-text h3 {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.welcome-text p {
+    color: #7a7068;
+    font-size: 13.5px;
+    line-height: 1.6;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+
+.btn-primary {
+    background: #2d6a4f;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: #235c42;
+}
+
+/* Quick Actions */
+.section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: #7a7068;
+    margin-bottom: -8px;
+}
+
+.quick-links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.quick-link-card {
+    background: #ffffff;
+    border: 1px solid #e2ddd6;
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #1a1714;
+    transition: box-shadow 0.2s;
+}
+
+.quick-link-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+}
+
+.quick-link-icon {
+    font-size: 28px;
+}
+
+.quick-link-title {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.quick-link-desc {
+    font-size: 12.5px;
+    color: #7a7068;
+}
+
+.arrow {
+    margin-left: auto;
+    color: #7a7068;
+    font-size: 20px;
+}

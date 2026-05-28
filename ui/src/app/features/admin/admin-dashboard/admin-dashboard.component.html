@@ -1,0 +1,46 @@
+<div class="dashboard">
+
+    <!-- Profile Card -->
+    <div class="profile-card">
+        <div class="profile-avatar">{{ getInitials() }}</div>
+        <div class="profile-info">
+            <div class="profile-top">
+                <h2>{{ user?.name }}</h2>
+                <button class="edit-btn">Edit Profile</button>
+            </div>
+            <p>{{ user?.email }}</p>
+            <span class="role-tag">Admin</span>
+        </div>
+    </div>
+
+    <!-- Welcome Card -->
+    <div class="welcome-card">
+        <div class="welcome-text">
+            <h3>Welcome back, Admin 👋</h3>
+            <p>Manage your book library, add new titles, and keep the collection up to date from the sidebar.</p>
+        </div>
+        <a routerLink="/admin/books" class="btn btn-primary">Go to Manage Books →</a>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="section-label">Quick Actions</div>
+    <div class="quick-links">
+        <a routerLink="/admin/books" class="quick-link-card">
+            <div class="quick-link-icon">➕</div>
+            <div class="quick-link-content">
+                <div class="quick-link-title">Add New Book</div>
+                <div class="quick-link-desc">Add a new title to the library</div>
+            </div>
+            <div class="arrow">›</div>
+        </a>
+        <a routerLink="/admin/books" class="quick-link-card">
+            <div class="quick-link-icon">📚</div>
+            <div class="quick-link-content">
+                <div class="quick-link-title">Manage Books</div>
+                <div class="quick-link-desc">Edit or delete existing books</div>
+            </div>
+            <div class="arrow">›</div>
+        </a>
+    </div>
+
+</div>
