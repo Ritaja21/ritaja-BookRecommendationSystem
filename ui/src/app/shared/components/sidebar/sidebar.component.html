@@ -1,0 +1,30 @@
+<aside class="sidebar">
+
+    <ng-container *ngIf="!isAdmin">
+        <a class="sidebar-item" routerLink="/customer/dashboard" routerLinkActive="active">
+            <span class="icon">🏠</span> Dashboard
+        </a>
+        <a class="sidebar-item" routerLink="/customer/books" routerLinkActive="active">
+            <span class="icon">📖</span> Browse Books
+        </a>
+        <a class="sidebar-item" routerLink="/customer/recommendation" routerLinkActive="active">
+            <span class="icon">✨</span> Recommendations
+        </a>
+    </ng-container>
+
+    <ng-container *ngIf="isAdmin">
+        <a class="sidebar-item" routerLink="/admin/dashboard" routerLinkActive="active">
+            <span class="icon">🏠</span> Dashboard
+        </a>
+        <a class="sidebar-item" routerLink="/admin/books" routerLinkActive="active">
+            <span class="icon">📚</span> Manage Books
+        </a>
+    </ng-container>
+
+    <div class="sidebar-divider"></div>
+
+    <button class="sidebar-item logout" (click)="logout()">
+        <span class="icon">🚪</span> Logout
+    </button>
+
+</aside>
