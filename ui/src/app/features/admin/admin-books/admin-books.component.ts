@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { DecimalPipe, NgFor, NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BookService } from '../../../core/services/book.services';
@@ -8,7 +8,7 @@ import { UpdateBook } from '../../../core/models/books/updatebook.model';
 
 @Component({
   selector: 'app-admin-books',
-  imports: [FormsModule, NgIf, NgFor],
+  imports: [FormsModule, NgIf, NgFor, DecimalPipe],
   templateUrl: './admin-books.component.html',
   styleUrl: './admin-books.component.css'
 })

@@ -48,7 +48,14 @@
                         <span class="muted" *ngIf="!book.genre">—</span>
                     </td>
                     <td>
-                        <span class="muted text-sm">No ratings</span>
+                        <ng-container *ngIf="book.averageRating; else noRating">
+                            <span class="stars">{{ getStars(book.averageRating) }}</span>
+                            <span class="stars-empty">{{ getEmptyStars(book.averageRating) }}</span>
+                            <span class="muted text-sm"> {{ book.averageRating | number:'1.1-1' }}</span>
+                        </ng-container>
+                        <ng-template #noRating>
+                            <span class="muted text-sm">No ratings</span>
+                        </ng-template>
                     </td>
                     <td>
                         <div class="action-btns">

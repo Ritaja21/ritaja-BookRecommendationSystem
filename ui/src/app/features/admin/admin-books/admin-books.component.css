@@ -150,6 +150,16 @@
     font-size: 12px;
 }
 
+.stars {
+    color: #f4a261;
+    font-size: 14px;
+}
+
+.stars-empty {
+    color: #ddd;
+    font-size: 14px;
+}
+
 .genre-tag {
     font-size: 11px;
     font-weight: 600;

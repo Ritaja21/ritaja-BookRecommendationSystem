@@ -4,6 +4,8 @@ export interface Book {
     author: string,
     genre?: string,
     description?: string,
+    averageRating?: number | null,
     createdAt?: string,
     updatedAt?: string,
+
 }
