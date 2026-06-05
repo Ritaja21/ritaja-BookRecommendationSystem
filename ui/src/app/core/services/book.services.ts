@@ -5,9 +5,10 @@ import { ApiResponse } from "../models/auth/api-response.model";
 import { Book } from "../models/books/book.model";
 import { CreateBook } from "../models/books/createbook.model";
 import { UpdateBook } from "../models/books/updatebook.model";
+import { BookSearch } from "../models/books/booksearch.model";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class BookService {
     private http = inject(HttpClient)
@@ -35,5 +36,20 @@ export class BookService {
     deleteBook(id: number) {
         return this.http.delete(`${this.apiUrl}/books/${id}`);
     }
+
+    searchBooks(params: BookSearch) {
+        const parts: string[] = [];
+
+        if (params.query) parts.push(`query=${encodeURIComponent(params.query)}`);
+        if (params.author) parts.push(`author=${encodeURIComponent(params.author)}`);
+        if (params.genre) parts.push(`genre=${encodeURIComponent(params.genre)}`);
+
+        const queryString = parts.length > 0 ? '?' + parts.join('&') : '';
+
+        return this.http.get<ApiResponse<Book[]>>(
+            `${this.apiUrl}/books/search${queryString}`
+        );
+    }
+
 
 }
