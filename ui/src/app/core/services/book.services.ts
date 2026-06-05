@@ -16,25 +16,25 @@ export class BookService {
 
     getBooks() {
         return this.http.get<ApiResponse<Book[]>>(
-            `${this.apiUrl}/books`
+            `${this.apiUrl}/book`
         );
     }
 
     createBook(data: CreateBook) {
         return this.http.post<ApiResponse<Book>>(
-            `${this.apiUrl}/books`,
+            `${this.apiUrl}/book`,
             data
         );
     }
     updateBook(id: number, data: UpdateBook) {
         return this.http.put<ApiResponse<Book>>(
-            `${this.apiUrl}/books/${id}`,
+            `${this.apiUrl}/book/${id}`,
             data
         );
     }
 
     deleteBook(id: number) {
-        return this.http.delete(`${this.apiUrl}/books/${id}`);
+        return this.http.delete(`${this.apiUrl}/book/${id}`);
     }
 
     searchBooks(params: BookSearch) {
@@ -47,7 +47,7 @@ export class BookService {
         const queryString = parts.length > 0 ? '?' + parts.join('&') : '';
 
         return this.http.get<ApiResponse<Book[]>>(
-            `${this.apiUrl}/books/search${queryString}`
+            `${this.apiUrl}/book/search${queryString}`
         );
     }
 
