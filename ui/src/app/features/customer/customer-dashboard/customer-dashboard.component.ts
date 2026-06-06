@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.services';
+import { UserService } from '../../../core/services/user.services';
 
 @Component({
   selector: 'app-customer-dashboard',
@@ -9,15 +10,41 @@ import { AuthService } from '../../../core/services/auth.services';
   templateUrl: './customer-dashboard.component.html',
   styleUrl: './customer-dashboard.component.css'
 })
-export class CustomerDashboardComponent {
+export class CustomerDashboardComponent implements OnInit {
   private authService = inject(AuthService);
+  private userService = inject(UserService);
 
-  user = this.authService.getUser();
+  user: any = null;
+
+  ngOnInit(): void {
+
+    this.userService.getProfile().subscribe({
+      next: (response) => {
+
+        this.user = response.data;
+
+        localStorage.setItem(
+          'user',
+          JSON.stringify(response.data)
+        );
+
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+
+  }
 
   getInitials(): string {
     if (!this.user?.name) return '?';
-    return this.user.name.split(' ')
-      .map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
+
+    return this.user.name
+      .split(' ')
+      .map((n: string) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
   }
 
   getFirstName(): string {
