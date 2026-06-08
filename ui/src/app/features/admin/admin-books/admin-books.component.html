@@ -1,1 +1,107 @@
-<p>admin-books works!</p>
+<div class="page">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Manage Books</h1>
+            <p class="page-sub">Add, edit or remove books from the library</p>
+        </div>
+        <button class="btn btn-primary" (click)="openAddForm()">+ Add New Book</button>
+    </div>
+
+    <!-- Messages -->
+    <div class="msg msg-success" *ngIf="successMessage">{{ successMessage }}</div>
+    <div class="msg msg-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input class="input input-search" placeholder="Search books..." [(ngModel)]="searchQuery"
+                (ngModelChange)="filterBooks()" />
+        </div>
+        <input class="input" style="min-width: 160px;" placeholder="Filter by genre..." [(ngModel)]="selectedGenre"
+            (ngModelChange)="filterBooks()" />
+    </div>
+
+    <!-- Table -->
+    <div class="card">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                    <th>Avg Rating</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="filteredBooks.length === 0">
+                    <td colspan="5" class="empty-row">No books found.</td>
+                </tr>
+                <tr *ngFor="let book of filteredBooks">
+                    <td class="bold">{{ book.title }}</td>
+                    <td class="muted">{{ book.author }}</td>
+                    <td>
+                        <span class="genre-tag" *ngIf="book.genre">{{ book.genre }}</span>
+                        <span class="muted" *ngIf="!book.genre">—</span>
+                    </td>
+                    <td>
+                        <ng-container *ngIf="book.averageRating; else noRating">
+                            <span class="stars">{{ getStars(book.averageRating) }}</span>
+                            <span class="stars-empty">{{ getEmptyStars(book.averageRating) }}</span>
+                            <span class="muted text-sm"> {{ book.averageRating | number:'1.1-1' }}</span>
+                        </ng-container>
+                        <ng-template #noRating>
+                            <span class="muted text-sm">No ratings</span>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn btn-edit" (click)="openEditForm(book)">Edit</button>
+                            <button class="btn btn-delete" (click)="deleteBook(book.bookId)">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add / Edit Form -->
+    <div class="form-section" *ngIf="showForm">
+        <div class="form-card">
+            <h3 class="form-title">{{ isEditing ? 'Edit Book' : 'Add New Book' }}</h3>
+
+            <div class="form-group">
+                <label class="form-label">Title</label>
+                <input class="form-input" placeholder="Book title" [(ngModel)]="formData.title" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Author</label>
+                <input class="form-input" placeholder="Author name" [(ngModel)]="formData.author" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Genre</label>
+                <input class="form-input" placeholder="e.g. Detective Fiction, Fantasy..."
+                    [(ngModel)]="formData.genre" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-input textarea" placeholder="Short description..."
+                    [(ngModel)]="formData.description" rows="4"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-primary" (click)="saveBook()">
+                    {{ isEditing ? 'Update Book' : 'Save Book' }}
+                </button>
+                <button class="btn btn-cancel" (click)="cancelForm()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+</div>

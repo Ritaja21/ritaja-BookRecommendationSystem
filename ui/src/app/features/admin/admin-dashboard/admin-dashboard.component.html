@@ -4,19 +4,32 @@
     <div class="profile-card">
         <div class="profile-avatar">{{ getInitials() }}</div>
         <div class="profile-info">
-            <div class="profile-top">
-                <h2>{{ user?.name }}</h2>
-                <button class="edit-btn">Edit Profile</button>
-            </div>
+            <h2>{{ user?.name }}</h2>
             <p>{{ user?.email }}</p>
-            <span class="role-tag">Admin</span>
+            <span class="role-tag">{{ user?.role }}</span>
+        </div>
+        <button *ngIf="!isEditing" class="edit-btn" (click)="startEdit()">
+            Edit Profile
+        </button>
+    </div>
+
+    <!-- Inline Edit Form — shows below profile when editing -->
+    <div class="edit-form-card" *ngIf="isEditing">
+        <h3 class="edit-form-title">Edit Profile</h3>
+        <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" [(ngModel)]="editedName" class="form-input" placeholder="Your name" />
+        </div>
+        <div class="form-actions">
+            <button class="save-btn" (click)="saveProfile()">Save</button>
+            <button class="cancel-btn" (click)="cancelEdit()">Cancel</button>
         </div>
     </div>
 
     <!-- Welcome Card -->
     <div class="welcome-card">
         <div class="welcome-text">
-            <h3>Welcome back, Admin 👋</h3>
+            <h3>Welcome back, {{ user?.name }}👋 </h3>
             <p>Manage your book library, add new titles, and keep the collection up to date from the sidebar.</p>
         </div>
         <a routerLink="/admin/books" class="btn btn-primary">Go to Manage Books →</a>

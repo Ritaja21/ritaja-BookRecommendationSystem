@@ -4,7 +4,7 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar.compon
 import { SidebarComponent } from '../../../shared/components/sidebar/sidebar.component';
 
 @Component({
-  selector: 'app-customer-layout',
+  selector: 'app-admin-layout',
   imports: [RouterOutlet, NavbarComponent, SidebarComponent],
   templateUrl: './admin-layout.component.html',
   styleUrl: './admin-layout.component.css'
