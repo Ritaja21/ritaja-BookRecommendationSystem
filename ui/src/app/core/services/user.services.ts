@@ -7,6 +7,7 @@ import { ApiResponse } from '../models/auth/api-response.model';
 import { User } from '../models/auth/user.model';
 import { UserUpdate } from '../models/auth/userupdate.model';
 import { UserHistory } from "../models/books/user-history.model";
+import { UserRead } from '../models/books/user-read.model';
 
 @Injectable({
     providedIn: 'root'
@@ -30,10 +31,18 @@ export class UserService {
         );
     }
 
-       getHistory() {
+    getHistory() {
         return this.http.get<ApiResponse<UserHistory[]>>(
             `${this.apiUrl}/user/history`
         )
     }
+
+    markAsRead(data: UserRead) {
+        return this.http.post(
+            `${this.apiUrl}/user/read`,
+            data
+        );
+    }
+
 
 }

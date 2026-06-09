@@ -54,7 +54,12 @@
             </div>
 
             <div class="book-actions">
-                <button class="btn btn-primary btn-sm">✓ Mark Read</button>
+                <button class="btn btn-primary btn-sm" (click)="markAsRead(book.bookId)"
+                    [disabled]="history.includes(book.bookId)">{{
+                    history.includes(book.bookId)
+                    ? '✓ Read'
+                    : '✓ Mark Read'
+                    }}</button>
                 <button class="btn btn-outline btn-sm">Rate</button>
             </div>
 

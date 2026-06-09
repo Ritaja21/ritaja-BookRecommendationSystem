@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgIf, NgFor, DecimalPipe } from '@angular/common';
 import { BookService } from '../../../core/services/book.services';
 import { Book } from '../../../core/models/books/book.model';
+import { UserService } from '../../../core/services/user.services';
 
 
 @Component({
@@ -13,14 +14,17 @@ import { Book } from '../../../core/models/books/book.model';
 })
 export class CustomerBooksComponent implements OnInit {
   private bookService = inject(BookService);
+  private userService = inject(UserService);
 
   books: Book[] = [];
+  history: number[] = [];
   searchQuery = '';
   genreFilter = '';
   errorMessage = '';
 
   ngOnInit(): void {
     this.loadBooks();
+    this.loadHistory();
   }
 
   loadBooks() {
@@ -32,6 +36,39 @@ export class CustomerBooksComponent implements OnInit {
         this.errorMessage = error.error?.message ?? 'Failed to load books';
       }
     });
+  }
+
+  loadHistory() {
+    this.userService.getHistory().subscribe({
+      next: (response) => {
+
+        this.history = response.data
+          .filter(x => x.isRead)
+          .map(x => x.bookId);
+
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  markAsRead(bookId: number) {
+
+    this.userService.markAsRead({ bookId }).subscribe({
+
+      next: () => {
+
+        this.history.push(bookId);
+
+      },
+
+      error: (error) => {
+        console.log(error);
+      }
+
+    });
+
   }
 
   search() {

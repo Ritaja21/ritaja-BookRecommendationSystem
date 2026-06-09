@@ -1,11 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.services';
 
 @Component({
   selector: 'app-navbar',
-  imports: [NgIf],
+  imports: [],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
