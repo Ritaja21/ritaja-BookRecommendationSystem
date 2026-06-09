@@ -1,17 +1,31 @@
 <div class="dashboard">
 
     <!-- Profile Card -->
-    <div *ngIf="user" class="dashboard">
+    <div class="profile-card">
         <div class="profile-avatar">{{ getInitials() }}</div>
         <div class="profile-info">
-            <div class="profile-top">
-                <h2>{{ user?.name }}</h2>
-                <button class="edit-btn">Edit Profile</button>
-            </div>
+            <h2>{{ user?.name }}</h2>
             <p>{{ user?.email }}</p>
-            <span class="role-tag">{{user?.role}}</span>
+            <span class="role-tag">{{ user?.role }}</span>
+        </div>
+        <button *ngIf="!isEditing" class="edit-btn" (click)="startEdit()">
+            Edit Profile
+        </button>
+    </div>
+
+    <!-- Inline Edit Form — shows below profile when editing -->
+    <div class="edit-form-card" *ngIf="isEditing">
+        <h3 class="edit-form-title">Edit Profile</h3>
+        <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" [(ngModel)]="editedName" class="form-input" placeholder="Your name" />
+        </div>
+        <div class="form-actions">
+            <button class="save-btn" (click)="saveProfile()">Save</button>
+            <button class="cancel-btn" (click)="cancelEdit()">Cancel</button>
         </div>
     </div>
+
 
     <!-- Welcome Card -->
     <div class="welcome-card">
@@ -42,11 +56,26 @@
                     </td>
                 </tr>
                 <tr *ngFor="let item of history">
-                    <td>{{item.title}}</td>
-                    <td>{{item.author}}</td>
-                    <td>{{item.genre}}</td>
-                    <td>{{item.isRead? 'Read':'Unread'}}</td>
-                    <td>{{item.Rating ?? '-'}}</td>
+                    <td class="td-title">{{item.title}}</td>
+                    <td class="td-muted">{{item.author}}</td>
+                    <td>
+                        <span class="genre-tag" *ngIf="item.genre">{{ item.genre }}</span>
+                        <span class="td-muted" *ngIf="!item.genre">—</span>
+                    </td>
+                    <td>
+                        <span [class]="item.isRead ? 'status-read' : 'status-unread'">
+                            {{ item.isRead ? 'Read' : 'Not Read' }}
+                        </span>
+                    </td>
+                    <td>
+                        <ng-container *ngIf="item.rating; else noRating">
+                            <span class="stars">{{ getStars(item.rating) }}</span>
+                            <span class="stars-empty">{{ getEmptyStars(item.rating) }}</span>
+                        </ng-container>
+                        <ng-template #noRating>
+                            <span class="td-muted">—</span>
+                        </ng-template>
+                    </td>
                 </tr>
             </tbody>
         </table>
