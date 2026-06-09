@@ -25,7 +25,8 @@ namespace api.src.Mapping
             .ForMember(dest => dest.Title,
                 opt => opt.MapFrom(src => src.Book.Title))
             .ForMember(dest => dest.Author,
-                opt => opt.MapFrom(src => src.Book.Author));
+                opt => opt.MapFrom(src => src.Book.Author))
+            .ForMember(dest => dest.Genre, opt => opt.MapFrom(src => src.Book.Genre ?? string.Empty));
         }
     }
 }

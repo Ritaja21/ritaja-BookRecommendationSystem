@@ -9,14 +9,14 @@
                 <button class="edit-btn">Edit Profile</button>
             </div>
             <p>{{ user?.email }}</p>
-            <span class="role-tag">Customer</span>
+            <span class="role-tag">{{user?.role}}</span>
         </div>
     </div>
 
     <!-- Welcome Card -->
     <div class="welcome-card">
         <div class="welcome-text">
-            <h3>Welcome back, {{ getFirstName() }} 👋</h3>
+            <h3>Welcome back, {{user?.name}} 👋</h3>
             <p>Track your reading, rate books you love, and discover new ones with AI-powered recommendations.</p>
         </div>
         <a routerLink="/customer/books" class="btn btn-primary">Browse Books →</a>
@@ -36,10 +36,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr *ngIf="history.length===0">
                     <td colspan="5" class="empty-row">
                         No reading history yet. Start by browsing books!
                     </td>
+                </tr>
+                <tr *ngFor="let item of history">
+                    <td>{{item.title}}</td>
+                    <td>{{item.author}}</td>
+                    <td>{{item.genre}}</td>
+                    <td>{{item.isRead? 'Read':'Unread'}}</td>
+                    <td>{{item.Rating ?? '-'}}</td>
                 </tr>
             </tbody>
         </table>
