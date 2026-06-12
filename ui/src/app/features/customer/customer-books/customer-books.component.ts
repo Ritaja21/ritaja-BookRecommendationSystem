@@ -18,8 +18,12 @@ export class CustomerBooksComponent implements OnInit {
 
   books: Book[] = [];
   history: number[] = [];
+  ratedbooks: number[] = [];
   searchQuery = '';
   genreFilter = '';
+  selectedBookId: number | null = null;
+  selectedRating = 0;
+  showRatingModal = false;
   errorMessage = '';
 
   ngOnInit(): void {
@@ -46,6 +50,9 @@ export class CustomerBooksComponent implements OnInit {
           .filter(x => x.isRead)
           .map(x => x.bookId);
 
+        this.ratedbooks = response.data
+          .filter(x => x.rating != null)
+          .map(x => x.bookId);
       },
       error: (error) => {
         console.log(error);
@@ -101,5 +108,37 @@ export class CustomerBooksComponent implements OnInit {
 
   getEmptyStars(rating: number): string {
     return '★'.repeat(5 - Math.round(rating));
+  }
+
+  openRatingModal(bookId: number) {
+    this.selectedBookId = bookId;
+    this.selectedRating = 0;
+    this.showRatingModal = true;
+  }
+
+  submitRating() {
+
+    if (!this.selectedBookId || this.selectedRating < 1) {
+      return;
+    }
+
+    const payload = {
+      bookId: this.selectedBookId,
+      rating: this.selectedRating
+    };
+
+    this.userService.rateBook(payload).subscribe({
+      next: () => {
+
+        this.showRatingModal = false;
+
+        this.loadBooks();
+        this.loadHistory();
+
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 }
