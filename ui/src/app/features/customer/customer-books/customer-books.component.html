@@ -1,1 +1,129 @@
-<p>customer-books works!</p>
+<div class="page">
+
+    <!-- Header -->
+    <div class="page-header">
+        <h1 class="page-title">Browse Books</h1>
+        <p class="page-sub">Discover, rate, and track your reading</p>
+    </div>
+
+    <!-- Error -->
+    <div class="msg msg-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input class="input input-search" placeholder="Search by title or author..." [(ngModel)]="searchQuery"
+                (ngModelChange)="search()" />
+        </div>
+        <input class="input genre-input" placeholder="Filter by genre..." [(ngModel)]="genreFilter"
+            (ngModelChange)="search()" />
+        <button class="clear-btn" (click)="clearSearch()" *ngIf="searchQuery || genreFilter">
+            Clear
+        </button>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="books.length === 0 && !errorMessage">
+        <p>No books found. Try a different search.</p>
+    </div>
+
+    <!-- Book Grid -->
+    <div class="book-grid" *ngIf="books.length > 0">
+        <div class="book-card" *ngFor="let book of books; let i = index">
+
+            <div class="book-spine"></div>
+
+            <div class="book-meta">
+                <div class="book-title">{{ book.title }}</div>
+                <div class="book-author">{{ book.author }}</div>
+            </div>
+
+            <span class="genre-tag" *ngIf="book.genre">{{ book.genre }}</span>
+
+            <div class="book-desc" *ngIf="book.description">{{ book.description }}</div>
+            <div class="book-desc muted" *ngIf="!book.description">No description available.</div>
+
+            <div class="book-footer">
+                <ng-container *ngIf="book.averageRating">
+                    <span class="stars">{{ getStars(book.averageRating) }}</span>
+                    <span class="stars-empty">{{ getEmptyStars(book.averageRating) }}</span>
+                    <span class="rating-val">{{ book.averageRating | number:'1.1-1' }}</span>
+                </ng-container>
+                <span class="no-rating" *ngIf="!book.averageRating">No ratings yet</span>
+            </div>
+
+            <div class="book-actions">
+                <button class="btn btn-primary btn-sm" (click)="markAsRead(book.bookId)"
+                    [disabled]="history.includes(book.bookId)">{{
+                    history.includes(book.bookId)
+                    ? '✓ Read'
+                    : '✓ Mark Read'
+                    }}</button>
+                <button class="btn btn-outline btn-sm" (click)="openRatingModal(book.bookId)"
+                    [disabled]="ratedbooks.includes(book.bookId)">
+                    {{
+                    ratedbooks.includes(book.bookId)
+                    ? '✓ Rated'
+                    : 'Rate'
+                    }}
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div class="rating-modal" *ngIf="showRatingModal">
+
+        <div class="rating-card">
+
+            <h3>Rate This Book</h3>
+
+            <p>Select a rating from 1 to 5 stars</p>
+
+            <div class="stars-select">
+
+                <span [class.active]="selectedRating >= 1" (click)="selectedRating = 1">
+                    ★
+                </span>
+
+                <span [class.active]="selectedRating >= 2" (click)="selectedRating = 2">
+                    ★
+                </span>
+
+                <span [class.active]="selectedRating >= 3" (click)="selectedRating = 3">
+                    ★
+                </span>
+
+                <span [class.active]="selectedRating >= 4" (click)="selectedRating = 4">
+                    ★
+                </span>
+
+                <span [class.active]="selectedRating >= 5" (click)="selectedRating = 5">
+                    ★
+                </span>
+
+            </div>
+
+            <p class="selected-rating">
+                Rating: {{ selectedRating }}/5
+            </p>
+
+            <div class="modal-actions">
+
+                <button class="btn btn-primary" (click)="submitRating()">
+                    Submit Rating
+                </button>
+
+                <button class="btn btn-outline" (click)="showRatingModal = false">
+                    Cancel
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
