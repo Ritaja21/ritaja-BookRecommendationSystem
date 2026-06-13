@@ -1,1 +1,93 @@
-<p>recommendation works!</p>
+<div class="page">
+
+    <!-- Header -->
+    <div class="page-header">
+        <h1 class="page-title">AI Recommendations</h1>
+        <p class="page-sub">Powered by Groq AI — get personalized book suggestions</p>
+    </div>
+
+    <!-- Form -->
+    <div class="rec-form">
+        <h3 class="form-title">What are you looking for?</h3>
+        <p class="form-desc">Describe your interest and optionally filter by genre and minimum rating</p>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Your Interest / Prompt</label>
+                <input class="form-input" placeholder="e.g. psychological thriller with a twist ending"
+                    [(ngModel)]="prompt" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Genre (optional)</label>
+                <input class="form-input" placeholder="e.g. Fiction, Thriller..." [(ngModel)]="genre" />
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="form-label">Min Rating</label>
+                <select class="form-input" [(ngModel)]="minimumRating">
+                    <option [ngValue]="undefined">Any</option>
+                    <option [ngValue]="3">3+</option>
+                    <option [ngValue]="4">4+</option>
+                    <option [ngValue]="4.5">4.5+</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" (click)="getRecommendation()" [disabled]="isLoading">
+            <span *ngIf="!isLoading">✨ Get Recommendations</span>
+            <span *ngIf="isLoading">Loading...</span>
+        </button>
+    </div>
+
+    <!-- Error -->
+    <div class="msg msg-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <!-- Results -->
+    <div class="results-grid" *ngIf="response">
+
+        <!-- Internal -->
+        <div class="result-card">
+            <div class="result-header">
+                <h3 class="result-title">From Our Library</h3>
+                <span class="tag tag-internal">Internal</span>
+            </div>
+
+            <div *ngIf="response.internalRecommendations.length === 0" class="empty-result">
+                No matching books found in our library.
+            </div>
+
+            <div class="book-item" *ngFor="let book of response.internalRecommendations">
+                <div class="book-item-info">
+                    <div class="book-item-title">{{ book.title }}</div>
+                    <div class="book-item-author">{{ book.author }}</div>
+                </div>
+                <div class="book-item-rating" *ngIf="book.averageRating">
+                    <span class="stars">{{ getStars(book.averageRating) }}</span>
+                    <span class="stars-empty">{{ getEmptyStars(book.averageRating) }}</span>
+                </div>
+                <span class="no-rating" *ngIf="!book.averageRating">—</span>
+            </div>
+        </div>
+
+        <!-- External -->
+        <div class="result-card">
+            <div class="result-header">
+                <h3 class="result-title">AI Suggestions</h3>
+                <span class="tag tag-external">External</span>
+            </div>
+
+            <div *ngIf="response.externalRecommendations.length === 0" class="empty-result">
+                No external suggestions available.
+            </div>
+
+            <div class="book-item" *ngFor="let book of response.externalRecommendations">
+                <div class="book-item-info">
+                    <div class="book-item-title">{{ book.title }}</div>
+                    <div class="book-item-author">{{ book.author }}</div>
+                </div>
+                <a [href]="book.searchUrl" target="_blank" class="search-link">Search →</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -3,5 +3,5 @@ export interface RecommendationBook {
     author?: string,
     genre?: string,
     isInternal: boolean,
-    searchURL: string
+    searchUrl: string
 }

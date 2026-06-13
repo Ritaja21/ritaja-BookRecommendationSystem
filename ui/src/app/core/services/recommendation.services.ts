@@ -15,7 +15,7 @@ export class RecommendationService {
 
     getRecommendation(data: RecommendationRequest) {
         return this.http.post<ApiResponse<RecommendationResponse>>(
-            `${this.apiUrl}/api/recommedation`, data
+            `${this.apiUrl}/recommendation`, data
         );
     }
 }
