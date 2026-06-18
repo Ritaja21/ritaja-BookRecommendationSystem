@@ -15,7 +15,7 @@ export class RecommendationComponent {
   private recService = inject(RecommendationService);
 
   prompt = '';
-  genre = '';
+  genre = ''; 
   minimumRating: number | undefined = undefined;
   response: RecommendationResponse | null = null;
   isLoading = false;
