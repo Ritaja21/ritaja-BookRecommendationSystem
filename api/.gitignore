@@ -29,6 +29,7 @@ TestResults/
 *.coveragexml
 
 ## Secrets / local config 
+appsettings.json
 appsettings.Development.json
 
 
