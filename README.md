@@ -9,9 +9,9 @@ A full-stack book recommendation platform built as a training project. It combin
 
 | Hero Page | Customer Dashboard | Recommendations |
 |---|---|---|
-![Hero](docs\screenshots\home.png) | ![Customer_Dashboard](docs\screenshots\customer_dashboard.png) | ![Recommendations](docs\screenshots\recommendations.png)
+![Hero](.\docs\screenshots\home.png) | ![Customer_Dashboard](.\docs\screenshots\customer_dashboard.png) | ![Recommendations](.\docs\screenshots\recommendations.png)
 | Admin — Manage Books | Book Listing |
-| ![Manage_Books](docs\screenshots\manage_books.png) | ![BookListing](docs\screenshots\book_listing.png) |
+| ![Manage_Books](.\docs\screenshots\manage_books.png) | ![BookListing](.\docs\screenshots\book_listing.png) |
 
 ---
 
