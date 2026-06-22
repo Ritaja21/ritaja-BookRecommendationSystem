@@ -75,11 +75,11 @@ namespace api.src.Services
                 var apikey = _configuration["GroqSettings:ApiKey"];
 
                 var prompt = $@"Suggest 5 books.
-                Genre: {requestDTO.Genre}
-                User Interest: {requestDTO.Prompt}
-                Return ONLY in this exact format, one book per line:
-                Title | Author
-                No numbering, no extra text, no explanations.";
+    Genre: {requestDTO.Genre}
+    User Interest: {requestDTO.Prompt}
+    Return ONLY in this exact format, one book per line:
+    Title | Author
+    No numbering, no extra text, no explanations.";
 
                 var requestBody = new
                 {
@@ -133,7 +133,8 @@ namespace api.src.Services
                         var author = parts.Length > 1 ? parts[1].Trim() : string.Empty;
 
                         bool existsInDb = books.Any(b =>
-                            b.Title.ToLower() == title.ToLower());
+                             b.Title.ToLower().Contains(title.ToLower()) ||
+    title.ToLower().Contains(b.Title.ToLower()));
 
                         if (!existsInDb)
                         {
@@ -151,11 +152,9 @@ namespace api.src.Services
                 }
                 _logger.LogInformation("External recommendations fetched at {Time}: {Count} books.", DateTime.UtcNow, responseDTO.ExternalRecommendations.Count);
             }
-
             catch (HttpRequestException ex)
             {
-                _logger.LogError(ex, "Groq API call failed at {Time}. Status: {Status}", DateTime.UtcNow, ex.StatusCode);
-                throw;
+                _logger.LogError(ex, "Groq API call failed at {Time}. Status: {Status}. Returning internal recommendations only.", DateTime.UtcNow, ex.StatusCode);
             }
 
             return responseDTO;

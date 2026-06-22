@@ -140,7 +140,6 @@ flowchart TD
     style C fill:#e67e22,color:#fff
 ```
  
-This stage separation means a failure in Stage 2 (e.g. Groq API timeout or rate limit) currently fails the entire request — see [Assumptions & Limitations](./assumptions.md) for known constraints around this.
 
 ---
 
