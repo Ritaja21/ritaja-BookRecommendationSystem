@@ -8,3 +8,4 @@ Supplementary technical documentation for the AI Book Recommendation System. For
 | [api-contracts.md](./api-contracts.md) | Full request/response schema reference for every endpoint |
 | [data-flow.md](./data-flow.md) | Sequence diagrams for every major user flow (auth, book browsing, rating, recommendations, admin CRUD) |
 | [assumptions.md](./assumptions.md) | Deliberate design decisions, known limitations, and scope boundaries |
+| [screenshots](./screenshots) | Added screenshots of the working website showing every feature |
